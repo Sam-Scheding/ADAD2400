@@ -1,3 +1,4 @@
+import processing.sound.*;
 
 // Perlin Noise Stuff
 float NOISE_SCALE = 0.1;
@@ -14,6 +15,14 @@ int TILE_HEIGHT;
 int WIDTH, HEIGHT;
 int BG_COLOUR = 10;
 
+
+// Debugging stuff
+boolean DEBUG = true;
+
+
+// Sound stuff
+WhiteNoise noise;
+
 // Game Stuff
 Map map;
 Player player;
@@ -27,6 +36,11 @@ void setup() {
   TILE_WIDTH = floor(WIDTH/COLS);
   TILE_HEIGHT = floor(HEIGHT/ROWS);
 
+  noise = new WhiteNoise(this);
+
+  if(!DEBUG){
+    noise.play();
+  }
   
   map = new Map();  
   player = new Player();

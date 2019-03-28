@@ -43,7 +43,7 @@ class Map {
      if(tile == null){
         tile = createTile(x, y);
         map.put(k, tile);
-     } 
+     }
      
      return tile;
   }
