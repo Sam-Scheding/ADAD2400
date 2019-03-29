@@ -27,6 +27,23 @@ class Map {
   }
   
   /*
+    It's possible for the player to spawn in on a non-walkable tile. So rather than just randomly 
+    assigning a starting position to them, keep generating Tiles until one is walkable.
+  */
+  PVector getRandomWalkableTile(){
+    PVector pos;
+    Tile tile;
+    do {
+ 
+      // TODO: Noise is symmetric around (0,0). Figure out why and fix it      
+      pos = new PVector((int)random(-60000, 60000), (int)random(-60000, 60000));
+      tile = getOrCreateTile(pos);
+      
+    } while(!tile.walkable);
+
+    return pos;
+  }
+  /*
     If the tile already exists in the HashMap, just return that
     otherwise make a new one, add it to the HashMap and return it.
   */

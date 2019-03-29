@@ -4,12 +4,11 @@ class Player {
   
    PVector pos;
    
-   Player(){
+   Player(PVector pos){
      
-     // TODO: Noise is symmetric around (0,0). Figure out why and fix it
-     this.pos = new PVector((int)random(40000, 60000), (int)random(40000, 60000)); 
- }
-
+     this.pos = pos; 
+ 
+   }
   /*
     Move the player in the world. Assumes that the move is valid according to the rules of Game.
   */
