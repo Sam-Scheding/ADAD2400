@@ -57,14 +57,14 @@ class Map {
     PVector location = new PVector(x, y);
     Tile tile;
     // First try to get the tile from the map. 
-    tile = getTile(location);
+    tile = Store.getTile(location);
 
     // If it doesn't exist, this is eaither the first time the player has 
     // seen this tile, or they have been away for so long the tile has unloaded.
     // So make a new tile and add it to the map for later
     if (tile == null) {
       tile = createTile(x, y);
-      saveTile(location, tile);
+      Store.saveTile(location, tile);
     }     
     return tile;
   }
@@ -145,20 +145,11 @@ class Map {
 
             // Crumble the buildings into the landscape
             if(randomGaussian() * 1/dist < city.radius * 1/10){ // TODO: This needs tweaking
-              saveTile(location, new BuildingTile(x, y));
+              Store.saveTile(location, new BuildingTile(x, y));
             }
           }
         }
       }        
     }
   } 
-  
-  // Later if I want to use a DB, these will be useful
-  void saveTile(PVector location, Tile tile){
-      map.put(location, tile);
-  }
-  
-  Tile getTile(PVector location){
-    return map.get(location);
-  }
 }

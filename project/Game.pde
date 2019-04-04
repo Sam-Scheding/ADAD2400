@@ -6,7 +6,6 @@ class Game{
   
   Player player;
   Map map;
-  HUD hud = new HUD();
   Game(Player player, Map map){
     this.player = player;
     this.map = map;
@@ -29,7 +28,7 @@ class Game{
     when player movement is detected, and other necessary places.
   
   */
-  void render(){
+  void renderFrame(){
     Tile tile;
   
     background(BG_COLOUR);
@@ -57,7 +56,6 @@ class Game{
     
     //Then overlay the player on the map
     player.display();
-    hud.display(player);
   }
     
 }

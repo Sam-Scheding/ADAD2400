@@ -47,6 +47,7 @@ Player player;
 Game game;
 Audio audio;
 RandomEventQueue events;
+HUD hud;
 
 void setup() {
   
@@ -66,9 +67,10 @@ void setup() {
   player = new Player(map.getRandomWalkableTile());
   game = new Game(player, map);
   events = new RandomEventQueue(100);
-  
+  hud = new HUD();
+
   // The game only renders whenever input is detected, so give it an inital render to kick things off.
-  game.render();
+  game.renderFrame();
 }
 
 // draw() needs to be defined, even if it's empty, otherwise keyPressed() doesn't run. ¯\_(-_-)_/¯
@@ -101,6 +103,6 @@ void keyPressed(){
      player.move(move);
    }
 
- game.render();
- 
+ game.renderFrame();
+
 }
