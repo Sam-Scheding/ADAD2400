@@ -9,7 +9,6 @@ class Audio {
   
   int numTracks = 9;
   StringList tracks = new StringList();
-  AudioPlayer music;
 
   Audio(){
     int i = 1;
@@ -18,8 +17,6 @@ class Audio {
      i++;
     }
     tracks.shuffle();
-    String fileName = "music/" + tracks.get(0) + ".mp3";
-    music = minim.loadFile(fileName);    
 
   }
   
@@ -28,10 +25,26 @@ class Audio {
      // this means you can find files that are in the data folder and the 
      // sketch folder. you can also pass an absolute path, or a URL.
      
-     music.play();
    }
    
-   void close(){
-     music.close();
+}
+
+
+
+class MusicEvent extends Event{
+   AudioPlayer music;
+
+   MusicEvent(int thresh, float probability, boolean repeat){
+      super(thresh, probability, repeat);   
+   }
+   
+   void happen(){
+       String fileName = "music/Track_" + random(1, 9) + ".mp3";
+       music = minim.loadFile(fileName);    
+       music.play();
+   }
+  
+   boolean isDone(){
+     return !music.isPlaying(); 
    }
 }

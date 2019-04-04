@@ -37,6 +37,6 @@ class Player {
    
     fill(200);
     textSize(12);
-    text('@', TILE_WIDTH*HRAD, TILE_HEIGHT*VRAD); 
+    text('@', TILE_WIDTH*SCREEN_WIDTH, TILE_HEIGHT*SCREEN_HEIGHT); 
  }
 }
