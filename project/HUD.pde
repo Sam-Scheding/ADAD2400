@@ -2,13 +2,13 @@
 
 class HUD{
   
- HUD(){
+  HUD(){
    
- }
+  }
  
-   void display(Player p){
+  void display(){
      if(DEBUG){
-       text("(" + p.pos.x + ", " + p.pos.y + ")", 10, 30);
+       text("(" + player.location.x + ", " + player.location.y + ")", 10, 30);
      }
-   }
+  }
 }

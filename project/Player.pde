@@ -1,32 +1,31 @@
 
 
-class Player {
+class Player extends Mob{
 
-   PVector pos;
-   PVector screenPos;
-   int attackStrength;
-   
-   Player(PVector pos, PVector screenPos){
-     this.pos = pos; 
-     this.attackStrength = 30;
-     this.screenPos = screenPos;
+  Player(PVector location, float maxHealth){
+     super('@', location, 30, maxHealth);
+     this.icon = '@';
    }
-  /*
-    Move the player in the world. Assumes that the move is valid according to the rules of Game.
-  */
-  void move(PVector move){
-    pos.add(move); 
-  }
+
   
   void attack(){
-    ExplosionAnimation ea = new ExplosionAnimation(screenPos, attackStrength);
-
+    // Creating the animation is as simple as this. 
+    // It will be auto added to the list of things to animate, 
+    // and then removed when it's finished.
+    new ExplosionAnimation(screenPos, attackStrength);
+    
+  }
+  
+  void update(){
+  
   }
   
   void display(){
    
     fill(200);
     textSize(12);
-    text('@', screenPos.x, screenPos.y); 
+    text(this.icon, screenPos.x, screenPos.y); 
  }
+ 
+
 }

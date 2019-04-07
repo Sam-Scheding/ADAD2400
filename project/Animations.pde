@@ -1,3 +1,36 @@
+import java.util.Iterator; 
+
+// Any animations that are created get added to the 'animations' array list.
+// each time draw runs, each animation ticks forward one frame. Once the 
+// animation is finished, then it is removed from the array list.
+class Animations{
+
+  ArrayList<Animation> animations;
+  
+  Animations(){
+    animations = new ArrayList<Animation>(); // Every tick, any animations in this list have their next frame anima
+  }
+  
+  void renderAll(){
+    Iterator itr = animations.iterator(); 
+    while (itr.hasNext()){ 
+      game.renderFrame();
+      Animation a = (Animation)itr.next();
+      a.tick();
+      if(a.finished){ 
+        itr.remove(); 
+        game.renderFrame();
+      }
+    }
+  
+  }
+  
+  void add(Animation a){
+    animations.add(a);
+  }
+}
+
+
 /*
   This is the baseclass for all animations. In the draw() loop
   an array of these Animation objects is iterated over to update
@@ -67,10 +100,12 @@ class ExplosionAnimation extends Animation{
     while(itr.hasNext()){
        ExplosionParticle p = (ExplosionParticle)itr.next(); 
        p.tick();
+
        if (p.isDead()) {
           itr.remove();
        } 
     }
+   delay(5);
     
    // If all the particles are dead, finish the animation 
    if(particles.size() == 0){ finished = true; }
@@ -106,8 +141,8 @@ class ExplosionParticle {
 
   // Method to display
   void display() {
-    stroke(255);
-    fill(255);
+    stroke(255, lifespan*10);
+    fill(255, lifespan*10);
     text('#', position.x, position.y);
   }
 

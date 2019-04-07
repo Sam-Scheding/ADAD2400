@@ -1,7 +1,6 @@
-import java.util.Iterator; 
 
 // Debugging stuff
-boolean DEBUG = true;
+boolean DEBUG = false;
 
 // Procedural Generation Stuff
 int SEED = MAX_INT; // (int)random(MIN_INT, MAX_INT);
@@ -34,23 +33,20 @@ int H_RENDER_DISTANCE = SCREEN_WIDTH + CITY_RADIUS;
 // Window Stuff
 int WIDTH, HEIGHT;
 int BG_COLOUR = 10;
-
-
+Screen screen;
 
 
 // Sound stuff
 // we pass this to Minim so that it can load files from the data directory
-Minim minim = new Minim(this);
 
 
 // Game Stuff
 Map map;
 Player player;
 Game game;
-Audio audio;
-RandomEventQueue events;
 HUD hud;
-ArrayList<Animation> animations;
+Animations animations;
+Entities entities; // Similar to animations
 
 void setup() {
   
@@ -66,34 +62,24 @@ void setup() {
   TILE_HEIGHT = floor(HEIGHT/ROWS);
 
   // Generate Objects
+  entities = new Entities();
+  animations = new Animations();
   map = new Map();  
-  player = new Player(map.getRandomWalkableTile(), new PVector(TILE_WIDTH*SCREEN_WIDTH, TILE_HEIGHT*SCREEN_HEIGHT));
-  game = new Game(player, map);
   hud = new HUD();
-  events = new RandomEventQueue(100);
-  animations = new ArrayList<Animation>();
-  
+  screen = new Screen();
+  player = new Player(map.getRandomWalkableTile(), 100);
+  game = new Game();
+
+  Enemy enemy = new Enemy(new PVector(player.location.x+3, player.location.y+3));
   // The game only renders whenever input is detected, so give it an inital render to kick things off.
   game.renderFrame();
 }
 
 void draw(){
   
-  Iterator itr = animations.iterator(); 
   
-  // Any animations that are created get added to the 'animations' array list.
-  // each time draw runs, each animation ticks forward one frame. Once the 
-  // animation is finished, then it is removed from the array list.
-  while (itr.hasNext()){ 
-    game.renderFrame();
-    Animation a = (Animation)itr.next();
-    a.tick();
-    if(a.finished){ 
-      itr.remove(); 
-      game.renderFrame();
-    }
-  }
-  delay(10);
+  entities.renderAll();  
+  animations.renderAll();
 
 }
 
