@@ -1,7 +1,6 @@
 
 
 class Player {
-   ExplosionAnimation ea;
 
    PVector pos;
    PVector screenPos;
@@ -9,9 +8,8 @@ class Player {
    
    Player(PVector pos, PVector screenPos){
      this.pos = pos; 
-     this.attackStrength = 5;
+     this.attackStrength = 30;
      this.screenPos = screenPos;
-     this.ea = new ExplosionAnimation(this.screenPos, 50);
    }
   /*
     Move the player in the world. Assumes that the move is valid according to the rules of Game.
@@ -21,11 +19,7 @@ class Player {
   }
   
   void attack(){
-    int x = 0;
-    while(x < ea.directions.length){
-      ea.addParticle();
-      x++;
-    }
+    ExplosionAnimation ea = new ExplosionAnimation(screenPos, attackStrength);
 
   }
   

@@ -1,3 +1,5 @@
+import java.util.Iterator; 
+
 // Debugging stuff
 boolean DEBUG = true;
 
@@ -48,6 +50,7 @@ Game game;
 Audio audio;
 RandomEventQueue events;
 HUD hud;
+ArrayList<Animation> animations;
 
 void setup() {
   
@@ -66,22 +69,32 @@ void setup() {
   map = new Map();  
   player = new Player(map.getRandomWalkableTile(), new PVector(TILE_WIDTH*SCREEN_WIDTH, TILE_HEIGHT*SCREEN_HEIGHT));
   game = new Game(player, map);
-  events = new RandomEventQueue(100);
   hud = new HUD();
-
+  events = new RandomEventQueue(100);
+  animations = new ArrayList<Animation>();
+  
   // The game only renders whenever input is detected, so give it an inital render to kick things off.
   game.renderFrame();
 }
 
-// draw() needs to be defined, even if it's empty, otherwise keyPressed() doesn't run. ¯\_(-_-)_/¯
 void draw(){
   
-
-  if(player.ea.particles.size() > 0){  
+  Iterator itr = animations.iterator(); 
+  
+  // Any animations that are created get added to the 'animations' array list.
+  // each time draw runs, each animation ticks forward one frame. Once the 
+  // animation is finished, then it is removed from the array list.
+  while (itr.hasNext()){ 
     game.renderFrame();
-    player.ea.run();
+    Animation a = (Animation)itr.next();
+    a.tick();
+    if(a.finished){ 
+      itr.remove(); 
+      game.renderFrame();
+    }
   }
-  events.tick();
+  delay(10);
+
 }
 
 void stop(){
@@ -102,6 +115,7 @@ void keyPressed(){
  
   } else if(key == 'd' || key == 'D'){
     move = new PVector(1, 0);
+    
   } else if(key == ' '){ // Spacebar
     player.attack();
   }
