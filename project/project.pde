@@ -3,7 +3,8 @@
 boolean DEBUG = false;
 
 // Procedural Generation Stuff
-int SEED = MAX_INT; // (int)random(MIN_INT, MAX_INT);
+int SEED = (int)random(MIN_INT, MAX_INT);
+
 float CITY_PROB = 0.0005; // 0.05% chance per valid tile to generate a city
 int CITY_RADIUS = 10; // The maximum radius a city can have
 
@@ -35,12 +36,8 @@ int WIDTH, HEIGHT;
 int BG_COLOUR = 10;
 Screen screen;
 
-
-// Sound stuff
-// we pass this to Minim so that it can load files from the data directory
-
-
 // Game Stuff
+long TICK = 0;
 Map map;
 Player player;
 Game game;
@@ -48,11 +45,12 @@ HUD hud;
 Animations animations;
 Entities entities; // Similar to animations
 
+
 void setup() {
-  
-  // Set seeds for generation
+  if(DEBUG){ SEED = MAX_INT; }
   noiseSeed(SEED); // Set seed for Perlin Noise
   randomSeed(SEED); // Set seed for other RNG
+
 
   // Set visual properties
   fullScreen(); 
@@ -80,6 +78,7 @@ void draw(){
   
   entities.renderAll();  
   animations.renderAll();
+  TICK++;
 
 }
 

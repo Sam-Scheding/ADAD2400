@@ -13,8 +13,8 @@ class Entities{
   void renderAll(){
     Iterator itr = entities.iterator(); 
     while (itr.hasNext()){ 
-      game.renderFrame();
       Mob m = (Mob)itr.next();
+      game.renderFrame();
       m.tick();
       if(m.isDead()){ 
         itr.remove(); 
@@ -73,10 +73,14 @@ abstract class Mob{
 
 class Enemy extends Mob {
   
-  char[] icons = {30};
+  char[] icons = new char[30];
+  int iconSpeed = 5;
+  
   Enemy(PVector location){
     super('%', location, 5, 1);
-    for(int i = 0; i < icons.length; i++){ icons[i] = char(92+i); }
+  for(int i = 0; i < icons.length; i++){ 
+    icons[i] = (char)random(42, 47);
+  }
 
   }
   
@@ -85,15 +89,15 @@ class Enemy extends Mob {
   }
   
   void update(){
-    icon = icons[(int)random(icons.length)];
-    println("This is running");
+    if(TICK%iconSpeed == 0){
+      int index = (int)random(icons.length);
+      icon = icons[index];
+    }
   }
   
   void display(){
-    PVector screenPos = screen.getPosition(location);
-    fill(200);
-    textSize(12);
-    text(this.icon, screenPos.x, screenPos.y);   
+    Tile t = map.getOrCreateTile(location);   
+    t.face = icon;
   }
   
   

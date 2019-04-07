@@ -3,6 +3,9 @@
 
 class Screen{
 
+  Screen(){
+
+  }
   
   PVector getPosition(PVector location){
 
