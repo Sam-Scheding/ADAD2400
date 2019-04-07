@@ -8,6 +8,8 @@ int SEED = (int)random(MIN_INT, MAX_INT);
 float CITY_PROB = 0.0005; // 0.05% chance per valid tile to generate a city
 int CITY_RADIUS = 10; // The maximum radius a city can have
 
+float MOB_PROB = 0.001;
+
 // Perlin Noise Stuff
 float NOISE_SCALE = 0.1;
 
@@ -68,7 +70,6 @@ void setup() {
   player = new Player(map.getRandomWalkableTile(), 100);
   game = new Game();
 
-  Enemy enemy = new Enemy(new PVector(player.location.x+3, player.location.y+3));
   // The game only renders whenever input is detected, so give it an inital render to kick things off.
   game.renderFrame();
 }

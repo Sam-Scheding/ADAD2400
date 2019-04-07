@@ -112,6 +112,12 @@ class Map {
       return cityTile;
     }
 
+    // Scatter enemies around the map
+    if (random(1) > 1-MOB_PROB) { 
+      Enemy enemy = new Enemy(new PVector(x, y)); // Added to the list of entities in the constructor
+    }
+    
+
     tile = new LandTile(x, y);
 
     return tile;

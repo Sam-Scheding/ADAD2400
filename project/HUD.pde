@@ -1,10 +1,7 @@
 
 
 class HUD{
-  
-  HUD(){
-   
-  }
+ 
  
   void display(){
      if(DEBUG){

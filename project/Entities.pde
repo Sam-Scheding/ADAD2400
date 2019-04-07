@@ -26,6 +26,17 @@ class Entities{
   void add(Mob mob){
     entities.add(mob);
   }
+  
+  void kill(PVector location, float radius){
+    Iterator itr = entities.iterator(); 
+    while (itr.hasNext()){ 
+      Mob m = (Mob)itr.next();
+      if(PVector.dist(location, m.location) < radius){
+        m.health -= player.attackStrength; // Deplete the enemy's health
+        if(m.isDead()){ itr.remove(); } // If it has died, remove it from the entities list
+      }
+    }  
+  }
 }
 
 abstract class Mob{
@@ -63,7 +74,7 @@ abstract class Mob{
        return true;
     }
     return false;
- }
+  }
  
  abstract void update();
  abstract void display();

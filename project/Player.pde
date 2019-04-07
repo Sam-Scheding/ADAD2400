@@ -1,9 +1,11 @@
 
 
 class Player extends Mob{
-
+  
+  float attackRadius = 30;
+  
   Player(PVector location, float maxHealth){
-     super('@', location, 30, maxHealth);
+     super('@', location, 5, maxHealth);
      this.icon = '@';
    }
 
@@ -12,8 +14,8 @@ class Player extends Mob{
     // Creating the animation is as simple as this. 
     // It will be auto added to the list of things to animate, 
     // and then removed when it's finished.
-    new ExplosionAnimation(screenPos, attackStrength);
-    
+    new ExplosionAnimation(screenPos, attackRadius);
+    entities.kill(location, attackStrength);
   }
   
   void update(){
