@@ -21,8 +21,8 @@ String[] BUILDING_MESSAGES = {
 
 
 // Size/Shape of the canvas
-int SCREEN_HEIGHT = ceil(ROWS/2); // Vertical radius of the map
-int SCREEN_WIDTH = ceil(COLS/2); // Horizontal radius of the map
+int SCREEN_HEIGHT = ceil(ROWS/2); // Vertical radius of the screen
+int SCREEN_WIDTH = ceil(COLS/2); // Horizontal radius of the screen
 
 // The map needs to be rendered outside the players view so that cities don't magically appear
 // as the player gets close to them
@@ -64,7 +64,7 @@ void setup() {
 
   // Generate Objects
   map = new Map();  
-  player = new Player(map.getRandomWalkableTile());
+  player = new Player(map.getRandomWalkableTile(), new PVector(TILE_WIDTH*SCREEN_WIDTH, TILE_HEIGHT*SCREEN_HEIGHT));
   game = new Game(player, map);
   events = new RandomEventQueue(100);
   hud = new HUD();
@@ -76,6 +76,11 @@ void setup() {
 // draw() needs to be defined, even if it's empty, otherwise keyPressed() doesn't run. ¯\_(-_-)_/¯
 void draw(){
   
+
+  if(player.ea.particles.size() > 0){  
+    game.renderFrame();
+    player.ea.run();
+  }
   events.tick();
 }
 
@@ -97,11 +102,13 @@ void keyPressed(){
  
   } else if(key == 'd' || key == 'D'){
     move = new PVector(1, 0);
+  } else if(key == ' '){ // Spacebar
+    player.attack();
   }
- 
- if(game.validMove(move)){
+
+  if(game.validMove(move)){
      player.move(move);
-   }
+  }
 
  game.renderFrame();
 

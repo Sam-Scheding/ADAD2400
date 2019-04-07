@@ -116,12 +116,6 @@ class Map {
 
     return tile;
   }
-
-
-  // Render the tile to the screen
-  void display(Tile tile, int x, int y) {
-    text(tile.face, x*tile.w, y*tile.h);
-  }
   
   /*
      Create a city from a central location
@@ -152,4 +146,10 @@ class Map {
       }        
     }
   } 
+  
+  // Render the tile to the screen
+  void display(Tile tile, int x, int y) {
+    text(tile.face, x*tile.w, y*tile.h);
+  }
+  
 }

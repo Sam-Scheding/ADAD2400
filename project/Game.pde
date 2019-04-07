@@ -57,5 +57,4 @@ class Game{
     //Then overlay the player on the map
     player.display();
   }
-    
 }

@@ -1,13 +1,17 @@
 
 
 class Player {
-  
+   ExplosionAnimation ea;
+
    PVector pos;
+   PVector screenPos;
+   int attackStrength;
    
-   Player(PVector pos){
-     
+   Player(PVector pos, PVector screenPos){
      this.pos = pos; 
- 
+     this.attackStrength = 5;
+     this.screenPos = screenPos;
+     this.ea = new ExplosionAnimation(this.screenPos, 50);
    }
   /*
     Move the player in the world. Assumes that the move is valid according to the rules of Game.
@@ -16,27 +20,19 @@ class Player {
     pos.add(move); 
   }
   
-  //void moveUp(){
-  // pos.add(new PVector(0, -1));
-  //}
-  
-  //void moveDown(){
-  // pos.add(new PVector(0, 1));
-  //}
- 
-  //void moveLeft(){
-  // pos.add(new PVector(-1, 0));
+  void attack(){
+    int x = 0;
+    while(x < ea.directions.length){
+      ea.addParticle();
+      x++;
+    }
 
-  //}
- 
-  //void moveRight(){
-  //  pos.add(new PVector(1, 0));
-  //}
- 
- void display(){
+  }
+  
+  void display(){
    
     fill(200);
     textSize(12);
-    text('@', TILE_WIDTH*SCREEN_WIDTH, TILE_HEIGHT*SCREEN_HEIGHT); 
+    text('@', screenPos.x, screenPos.y); 
  }
 }
