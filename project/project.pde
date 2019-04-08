@@ -77,9 +77,10 @@ void setup() {
 void draw(){
   
   
-  entities.renderAll();  
-  animations.renderAll();
+  entities.tick();  
+  animations.tick();
   TICK++;
+  //game.renderFrame();
 
 }
 

@@ -10,17 +10,13 @@ class Entities{
     entities = new ArrayList<Mob>();
   }
 
-  void renderAll(){
+  void tick(){
     Iterator itr = entities.iterator(); 
     while (itr.hasNext()){ 
       Mob m = (Mob)itr.next();
-      game.renderFrame();
       m.tick();
-      if(m.isDead()){ 
-        itr.remove(); 
-        game.renderFrame();
-      }
     }  
+    game.renderFrame();
   }
   
   void add(Mob mob){

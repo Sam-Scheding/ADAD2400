@@ -11,15 +11,13 @@ class Animations{
     animations = new ArrayList<Animation>(); // Every tick, any animations in this list have their next frame anima
   }
   
-  void renderAll(){
+  void tick(){
     Iterator itr = animations.iterator(); 
     while (itr.hasNext()){ 
-      game.renderFrame();
       Animation a = (Animation)itr.next();
       a.tick();
       if(a.finished){ 
         itr.remove(); 
-        game.renderFrame();
       }
     }
   
