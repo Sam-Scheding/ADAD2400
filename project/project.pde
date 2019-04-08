@@ -74,7 +74,7 @@ void setup() {
 void draw(){
   
   
-  game.renderFrame();
+  screen.renderFrame();
   entities.tick();  
   animations.tick();
   TICK++;
