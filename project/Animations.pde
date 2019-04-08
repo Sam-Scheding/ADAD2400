@@ -139,8 +139,8 @@ class ExplosionParticle {
 
   // Method to display
   void display() {
-    stroke(255, lifespan*10);
-    fill(255, lifespan*10);
+    stroke(STROKE_COLOUR, lifespan*10);
+    fill(STROKE_COLOUR, lifespan*10);
     text('#', position.x, position.y);
   }
 

@@ -15,13 +15,12 @@ class Player extends Mob{
     // It will be auto added to the list of things to animate, 
     // and then removed when it's finished.
     new ExplosionAnimation(screenPos, attackRadius);
-    entities.kill(location, attackStrength);
+    entities.damage(location, attackRadius);
   }
-  
   void update(){
   
-  }
-  
+  } 
+
   void display(){
    
     fill(200);

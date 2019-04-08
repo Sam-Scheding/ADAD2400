@@ -18,6 +18,7 @@ int ROWS = 45;
 int COLS = 90;
 int TILE_WIDTH;
 int TILE_HEIGHT;
+
 String[] BUILDING_MESSAGES = {
   "The building is decrepit and slowly crumbling into the landscape.",
   "Darkness eminates from inside the building.",
@@ -27,15 +28,22 @@ String[] BUILDING_MESSAGES = {
 // Size/Shape of the canvas
 int SCREEN_HEIGHT = ceil(ROWS/2); // Vertical radius of the screen
 int SCREEN_WIDTH = ceil(COLS/2); // Horizontal radius of the screen
-
-// The map needs to be rendered outside the players view so that cities don't magically appear
-// as the player gets close to them
-int V_RENDER_DISTANCE = SCREEN_HEIGHT + CITY_RADIUS;
-int H_RENDER_DISTANCE = SCREEN_WIDTH + CITY_RADIUS;
+PVector[] DIRECTIONS = {
+  new PVector(0,-1),
+  new PVector(-1,0),
+  new PVector(0,1),
+  new PVector(1,0),
+};
 
 // Window Stuff
-int WIDTH, HEIGHT;
 int BG_COLOUR = 10;
+int STROKE_COLOUR = 255;
+int HUD_WIDTH = 200;
+int HUD_PADDING = 10;
+int HUD_Y = 0 + HUD_PADDING;
+int HUD_X;
+int HUD_HEIGHT;
+
 Screen screen;
 
 // Game Stuff
@@ -56,10 +64,10 @@ void setup() {
 
   // Set visual properties
   fullScreen(); 
-  WIDTH = width;
-  HEIGHT  = height;
-  TILE_WIDTH = floor(WIDTH/COLS);
-  TILE_HEIGHT = floor(HEIGHT/ROWS);
+  TILE_WIDTH = floor(width/COLS);
+  TILE_HEIGHT = floor(height/ROWS);
+  HUD_HEIGHT = height - HUD_PADDING*2;
+  HUD_X = width-HUD_WIDTH-HUD_PADDING;
 
   // Generate Objects
   entities = new Entities();
@@ -89,22 +97,19 @@ void keyPressed(){
   PVector move = new PVector(0, 0);
   
   if(key == 'w' || key == 'W'){   
-    move = new PVector(0, -1);
+    move = DIRECTIONS[0];
 
   } else if(key == 'a' || key == 'A'){
-    move = new PVector(-1, 0);
+    move = DIRECTIONS[1];
  
   } else if(key == 's' || key == 'S'){
-    move = new PVector(0, 1);
+    move = DIRECTIONS[2];
  
   } else if(key == 'd' || key == 'D'){
-    move = new PVector(1, 0);
+    move = DIRECTIONS[3];
     
   } else if(key == ' '){ // Spacebar
     player.attack();
   }
-
-  if(game.validMove(move)){
-     player.move(move);
-  }
+  player.move(move);
 }

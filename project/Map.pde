@@ -74,12 +74,6 @@ class Map {
     return getOrCreateTile((int)location.x, (int)location.y);
   }
 
-  /*
-    Get a tile if it's within a radius of an x,y coord
-  */
-  Tile getOrCreateTile(PVector location, int radius) {
-    return getOrCreateTile((int)location.x, (int)location.y);
-  }
 
 
 
@@ -117,9 +111,7 @@ class Map {
       Enemy enemy = new Enemy(new PVector(x, y)); // Added to the list of entities in the constructor
     }
     
-
     tile = new LandTile(x, y);
-
     return tile;
   }
   

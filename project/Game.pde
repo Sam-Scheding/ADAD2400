@@ -11,8 +11,8 @@ class Game{
   
   boolean validMove(PVector move){
     
-    PVector coord = PVector.add(player.location, move); // Turns out you can invoke add() statically like this. Much wow.
-    Tile tile = map.getOrCreateTile(coord);
+    PVector location = PVector.add(player.location, move); // Turns out you can invoke add() statically like this. Much wow.
+    Tile tile = map.getOrCreateTile(location);
     if(tile.walkable){
       return true;
     }
