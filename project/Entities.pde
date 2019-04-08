@@ -16,7 +16,6 @@ class Entities{
       Mob m = (Mob)itr.next();
       m.tick();
     }  
-    game.renderFrame();
   }
   
   void add(Mob mob){

@@ -69,18 +69,15 @@ void setup() {
   screen = new Screen();
   player = new Player(map.getRandomWalkableTile(), 100);
   game = new Game();
-
-  // The game only renders whenever input is detected, so give it an inital render to kick things off.
-  game.renderFrame();
 }
 
 void draw(){
   
   
+  game.renderFrame();
   entities.tick();  
   animations.tick();
   TICK++;
-  //game.renderFrame();
 
 }
 
@@ -110,7 +107,4 @@ void keyPressed(){
   if(game.validMove(move)){
      player.move(move);
   }
-
- game.renderFrame();
-
 }
