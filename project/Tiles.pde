@@ -11,7 +11,8 @@ abstract class Tile {
   float pVal;
   char face;
   boolean walkable;
-  
+  String message = "";
+
   Tile(int x, int y){
     this.x = x;
     this.y = y;
@@ -93,7 +94,6 @@ class CityCentreTile extends Tile {
 
 class BuildingTile extends Tile {
    
-  String message;
   
   BuildingTile(int x, int y){
     super(x, y);
@@ -101,16 +101,17 @@ class BuildingTile extends Tile {
     this.walkable = false;
     this.message = BUILDING_MESSAGES[(int)random(BUILDING_MESSAGES.length)];    
   }
-   
+ 
 }
 
-class StreetTile extends Tile {
-   
-  StreetTile(int x, int y){
+class FoodTile extends Tile {
+  float amount;
+  
+  FoodTile(int x, int y){
     super(x, y);
     this.face = '.';
     this.walkable = true;
-    
+    this.message = FOOD_MESSAGES[(int)random(FOOD_MESSAGES.length)];    
+    this.amount = 10;
   }
-  
 }

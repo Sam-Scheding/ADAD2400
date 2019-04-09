@@ -9,6 +9,7 @@ float CITY_PROB = 0.0005; // 0.05% chance per valid tile to generate a city
 int CITY_RADIUS = 10; // The maximum radius a city can have
 
 float MOB_PROB = 0.001;
+float FOOD_PROB = 0.001;
 
 // Perlin Noise Stuff
 float NOISE_SCALE = 0.1;
@@ -24,6 +25,9 @@ String[] BUILDING_MESSAGES = {
   "Darkness eminates from inside the building.",
 };
 
+String[] FOOD_MESSAGES = {
+  "You find some rotten scraps on the ground. It'll do for now.",
+};
 
 // Size/Shape of the canvas
 int SCREEN_HEIGHT = ceil(ROWS/2); // Vertical radius of the screen
@@ -85,6 +89,7 @@ void draw(){
   screen.renderFrame();
   entities.tick();  
   animations.tick();
+  game.tick();
   TICK++;
 
 }
@@ -110,6 +115,9 @@ void keyPressed(){
     
   } else if(key == ' '){ // Spacebar
     player.attack();
+  } else {
+    // This stops random keys from forcing a render
+    return;
   }
   player.move(move);
 }

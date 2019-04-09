@@ -110,6 +110,11 @@ class Map {
     if (random(1) > 1-MOB_PROB) { 
       Enemy enemy = new Enemy(new PVector(x, y)); // Added to the list of entities in the constructor
     }
+    // Scatter FoodTiles around the map
+    if (random(1) > 1-FOOD_PROB) { 
+      FoodTile foodTile = new FoodTile(x, y);
+      return foodTile;
+    }
     
     tile = new LandTile(x, y);
     return tile;

@@ -3,11 +3,14 @@
 class Player extends Mob{
   
   float attackRadius = 30;
+  float hunger;
+  float maxHunger = 100;
   
   Player(PVector location, float maxHealth){
      super('@', location, 5, maxHealth);
      this.icon = '@';
-   }
+     this.hunger = 0;
+  }
 
   
   void attack(){
@@ -28,5 +31,13 @@ class Player extends Mob{
     text(this.icon, screenPos.x, screenPos.y); 
  }
  
-
+ void move(PVector location){
+   super.move(location);
+   this.hunger += 0.2;
+ }
+ 
+  void eat(float amount){
+    this.hunger -= amount;
+    this.hunger = constrain(this.hunger, 0, maxHunger);
+  }
 }

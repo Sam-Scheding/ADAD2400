@@ -102,7 +102,7 @@ class Enemy extends Mob {
     if(random(1) > 1-moveProb){
       Tile tile = map.getOrCreateTile(location);
       tile.face = ' ';
-      move(DIRECTIONS[(int)random(DIRECTIONS.length)]);
+      this.move(DIRECTIONS[(int)random(DIRECTIONS.length)]);
     }
     if(TICK%iconSpeed == 0){
       int index = (int)random(icons.length);
