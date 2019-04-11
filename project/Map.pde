@@ -19,11 +19,9 @@
  */
 class Map {
 
-  HashMap<PVector, Tile> map;
   ArrayList<Tile> cities;
 
   Map() {
-    map = new HashMap<PVector, Tile>();
     cities = new ArrayList<Tile>();
   }
 
@@ -148,8 +146,13 @@ class Map {
         }
       }        
     }
-  } 
+  }
   
+  void updateTile(PVector location, Tile tile){
+    Store.removeTile(location);
+    Store.saveTile(location, tile);
+    screen.renderFrame();
+  }
   // Render the tile to the screen
   void display(Tile tile, int x, int y) {
     text(tile.face, x*tile.w, y*tile.h);

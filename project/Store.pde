@@ -15,4 +15,8 @@ static class Store{
  static Tile getTile(PVector location){
    return map.get(location);
  }
+ 
+ static void removeTile(PVector location){
+   map.remove(location);
+ }
 }

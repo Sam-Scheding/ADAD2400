@@ -30,10 +30,9 @@ class Entities{
       if(dist > 0 && dist < radius){
         m.health -= player.attackStrength; // Deplete the enemy's health
         // If it has died, remove it from the entities list
-        if(m.isDead()){ 
-          Store.saveTile(m.location, new DeadEnemyTile(m.location));
+        if(m.health <= 0){
+          m.die();
           itr.remove(); 
-        
         }
       }
     }  
@@ -71,11 +70,10 @@ abstract class Mob{
     display();
   }
   
-  boolean isDead(){
-    if(health <= 0){
-       return true;
-    }
-    return false;
+  void die(){
+
+    map.updateTile(location, (Tile)new DeadEnemyTile(location));
+    screen.renderFrame();
   }
  
  abstract void update();
@@ -99,13 +97,30 @@ class Enemy extends Mob {
   }
   
   void update(){
-    // Decide whether the enemy moves this turn
-    if(random(1) > 1-moveProb){
-      Tile tile = map.getOrCreateTile(location);
-      move(DIRECTIONS[(int)random(DIRECTIONS.length)]);
-      tile.face = Faces.LAND;
-    }
+    
+    PVector direction = new PVector(0,0);
+    Tile tile = map.getOrCreateTile(location);
 
+    // Decide whether the enemy should try to attack the player
+    if(PVector.dist(location, player.location) < 10){
+      state = MobStates.ATTACK;
+    } else {
+      state = MobStates.WANDER;
+    }
+    
+    // Decide whether the enemy wanders this turn
+    if(state == MobStates.WANDER && random(1) > 1-moveProb){
+      direction = DIRECTIONS[(int)random(DIRECTIONS.length)];      
+    } else if(state == MobStates.ATTACK){
+      direction = PVector.sub(location, player.location);
+      direction.normalize(); 
+      direction.rotate(PI);
+      if(random(1) > 1-moveProb){ 
+        direction = DIRECTIONS[(int)random(DIRECTIONS.length)];  // Enemies are too good, so slow them down a little
+      }
+    }
+    tile.face = Faces.LAND;
+    move(direction);
 
   }
   
