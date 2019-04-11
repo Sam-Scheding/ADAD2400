@@ -73,7 +73,10 @@ void setup() {
 
   player = new Player(map.getRandomWalkableTile(), 100);
   game = new Game();
+  
   screen.renderFrame();
+  entities.tick();  
+  game.tick();
 
 
 }
@@ -91,7 +94,7 @@ void stop(){
 
 void keyPressed(){
   PVector move = new PVector(0, 0);
-  
+
   if(key == 'w' || key == 'W'){   
     move = DIRECTIONS[0];
 

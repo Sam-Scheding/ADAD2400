@@ -33,6 +33,8 @@ class Player extends Mob{
  
  void move(PVector location){
    super.move(location);
+
+   hud.setMessage(map.getOrCreateTile(this.location).message);
    this.hunger += 0.2;
  }
  

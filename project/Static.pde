@@ -27,6 +27,10 @@ static class City{
 
 }
 
+static class MobStates{
+  static int WANDER = 0;
+  static int ATTACK = 1;
+}
 
 static class Messages{
   static String[] BUILDINGS = {

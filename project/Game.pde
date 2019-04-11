@@ -9,12 +9,11 @@ class Game{
     player.screenPos = screen.getPosition(player.location);
   }
   
-  boolean validMove(PVector move){
+  boolean validMove(PVector location, PVector move){
     
-    PVector location = PVector.add(player.location, move); // Turns out you can invoke add() statically like this. Much wow.
-    Tile tile = map.getOrCreateTile(location);
+    PVector newLocation = PVector.add(location, move); // Turns out you can invoke add() statically like this. Much wow.
+    Tile tile = map.getOrCreateTile(newLocation);
 
-    hud.setMessage(tile.message);
 
     if(tile.walkable){
       return true;

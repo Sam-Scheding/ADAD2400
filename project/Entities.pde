@@ -61,7 +61,7 @@ abstract class Mob{
     Move the entity in the world
   */
   void move(PVector move){
-    if(game.validMove(move)){ 
+    if(game.validMove(location, move)){ 
       location.add(move); 
     }
   }
@@ -87,6 +87,7 @@ abstract class Mob{
 class Enemy extends Mob {
   
   float moveProb = 0.1;
+  int state = MobStates.WANDER;
   
   Enemy(PVector location){
     super(Faces.ENEMY, location, 5, 1);
@@ -101,11 +102,12 @@ class Enemy extends Mob {
     // Decide whether the enemy moves this turn
     if(random(1) > 1-moveProb){
       Tile tile = map.getOrCreateTile(location);
+      move(DIRECTIONS[(int)random(DIRECTIONS.length)]);
       tile.face = Faces.LAND;
-      this.move(DIRECTIONS[(int)random(DIRECTIONS.length)]);
     }
+
+
   }
-    
   
   void display(){
     Tile t = map.getOrCreateTile(location);   
