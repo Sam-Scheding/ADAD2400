@@ -100,7 +100,7 @@ class Map {
 
 
     // If the tile is chosen as a city centre, create the city
-    if (random(1) > 1-CITY_PROB) { 
+    if (random(1) > 1-City.PROBABILITY) { 
       CityCentreTile cityTile = new CityCentreTile(x, y);
       createCity(cityTile); 
       return cityTile;
@@ -125,7 +125,7 @@ class Map {
   */
   void createCity(CityCentreTile city){
 
-    if (DEBUG) { city.face = '*'; } // show the middle of the city in debug mode
+    if (DEBUG) { city.face = Faces.CITY_CENTRE; } // show the middle of the city in debug mode
     
     // Add the city to the list
     cities.add(city); // TODO: This might not be necessary anymore

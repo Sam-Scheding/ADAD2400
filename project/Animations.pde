@@ -11,8 +11,9 @@ class Animations{
     animations = new ArrayList<Animation>(); // Every tick, any animations in this list have their next frame anima
   }
   
-  void tick(){
+  void renderFrame(){
     Iterator itr = animations.iterator(); 
+    if(itr.hasNext()){ screen.renderFrame(); } // Only render the screen if there's actually animations to play
     while (itr.hasNext()){ 
       Animation a = (Animation)itr.next();
       a.tick();
@@ -20,7 +21,6 @@ class Animations{
         itr.remove(); 
       }
     }
-  
   }
   
   void add(Animation a){
@@ -77,7 +77,7 @@ class ExplosionAnimation extends Animation{
   
   ExplosionAnimation(PVector position, float radius) {
     super(position);
-    this.radius = radius;
+    this.radius = radius * 5;
     int x = 0;
     while(x < directions.length){
       addParticle();

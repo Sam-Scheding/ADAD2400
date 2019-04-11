@@ -2,7 +2,7 @@
 class HUD{
   
   String message = "";
-  
+
   void display(){
     fill(BG_COLOUR);
     stroke(STROKE_COLOUR);
@@ -19,6 +19,24 @@ class HUD{
 
     text("MAP", HUD_X+10, HUD_Y+160 );
     text(this.message, HUD_X+10, HUD_Y+180, HUD_WIDTH, HUD_WIDTH);
+    
+    text("KEY", HUD_X+10, HUD_Y+300);
+    text(
+      "Player:" + Faces.PLAYER + 
+    "\nTree: " + Faces.TREE + 
+    "\nWater: " + Faces.WATER + 
+    "\nBuilding: " + Faces.BUILDING +
+    "\nEnemy: " + Faces.ENEMY +
+    "\nFood: " + Faces.FOOD +
+    "\nBuilding: " + Faces.BUILDING
+       
+      , HUD_X+10, HUD_Y+320);
+    //text("Building: " + Faces.BUILDING, HUD_X+80, HUD_Y+320);
+    //text("Water: " + Faces.WATER, HUD_X+10, HUD_Y+340);
+    //text("Enemy: " + Faces.ENEMY, HUD_X+80, HUD_Y+340);
+    //text("Tree: " + TREE, HUD_X+40, HUD_Y+320);
+    //text("Tree: " + TREE, HUD_X+40, HUD_Y+320);
+    
 
   }
   

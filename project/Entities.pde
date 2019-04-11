@@ -29,7 +29,12 @@ class Entities{
       float dist = PVector.dist(location, m.location);
       if(dist > 0 && dist < radius){
         m.health -= player.attackStrength; // Deplete the enemy's health
-        if(m.isDead()){ itr.remove(); } // If it has died, remove it from the entities list
+        // If it has died, remove it from the entities list
+        if(m.isDead()){ 
+          Store.saveTile(m.location, new DeadEnemyTile(m.location));
+          itr.remove(); 
+        
+        }
       }
     }  
   }
@@ -37,14 +42,14 @@ class Entities{
 
 abstract class Mob{
 
-  char icon;
+  String icon;
   PVector location;
   PVector screenPos;
   float attackStrength;
   float health;
   float maxHealth;
   
-  Mob(char icon, PVector location, float attackStrength, float maxHealth){
+  Mob(String icon, PVector location, float attackStrength, float maxHealth){
      this.icon = icon;
      this.location = location;
      this.attackStrength = attackStrength;
@@ -52,7 +57,6 @@ abstract class Mob{
      this.health = maxHealth;
      entities.add(this);
   }
-  
   /*
     Move the entity in the world
   */
@@ -82,16 +86,11 @@ abstract class Mob{
 
 class Enemy extends Mob {
   
-  char[] icons = new char[30];
-  int iconSpeed = 5;
-  float moveProb = 0.01;
+  float moveProb = 0.1;
   
   Enemy(PVector location){
-    super('%', location, 5, 1);
-    for(int i = 0; i < icons.length; i++){ 
-      icons[i] = (char)random(42, 47);
-    }
-
+    super(Faces.ENEMY, location, 5, 1);
+    
   }
   
   void attack(){
@@ -99,14 +98,11 @@ class Enemy extends Mob {
   }
   
   void update(){
+    // Decide whether the enemy moves this turn
     if(random(1) > 1-moveProb){
       Tile tile = map.getOrCreateTile(location);
-      tile.face = ' ';
+      tile.face = Faces.LAND;
       this.move(DIRECTIONS[(int)random(DIRECTIONS.length)]);
-    }
-    if(TICK%iconSpeed == 0){
-      int index = (int)random(icons.length);
-      icon = icons[index];
     }
   }
     

@@ -3,10 +3,8 @@
 boolean DEBUG = false;
 
 // Procedural Generation Stuff
-int SEED = (int)random(MIN_INT, MAX_INT);
+int SEED = (int)random(MIN_INT, MAX_INT); // 4,294,967,294 possible worlds
 
-float CITY_PROB = 0.0005; // 0.05% chance per valid tile to generate a city
-int CITY_RADIUS = 10; // The maximum radius a city can have
 
 float MOB_PROB = 0.001;
 float FOOD_PROB = 0.001;
@@ -20,14 +18,6 @@ int COLS = 90;
 int TILE_WIDTH;
 int TILE_HEIGHT;
 
-String[] BUILDING_MESSAGES = {
-  "The building is decrepit and slowly crumbling into the landscape.",
-  "Darkness eminates from inside the building.",
-};
-
-String[] FOOD_MESSAGES = {
-  "You find some rotten scraps on the ground. It'll do for now.",
-};
 
 // Size/Shape of the canvas
 int SCREEN_HEIGHT = ceil(ROWS/2); // Vertical radius of the screen
@@ -42,7 +32,7 @@ PVector[] DIRECTIONS = {
 // Window Stuff
 int BG_COLOUR = 10;
 int STROKE_COLOUR = 255;
-int HUD_WIDTH = 200;
+int HUD_WIDTH = 300;
 int HUD_PADDING = 10;
 int HUD_Y = 0 + HUD_PADDING;
 int HUD_X;
@@ -73,25 +63,26 @@ void setup() {
   HUD_HEIGHT = height - HUD_PADDING*2;
   HUD_X = width-HUD_WIDTH-HUD_PADDING;
 
+
   // Generate Objects
   entities = new Entities();
   animations = new Animations();
   map = new Map();  
   hud = new HUD();
   screen = new Screen();
+
   player = new Player(map.getRandomWalkableTile(), 100);
   game = new Game();
+  screen.renderFrame();
+
+
 }
 
 void draw(){
   
-  
-  screen.renderFrame();
-  entities.tick();  
-  animations.tick();
-  game.tick();
-  TICK++;
-
+  // This is a list. If it's empty nothing happens, but if 
+  // animations are added to it, they get played out
+  animations.renderFrame();
 }
 
 void stop(){
@@ -119,5 +110,11 @@ void keyPressed(){
     // This stops random keys from forcing a render
     return;
   }
+  
   player.move(move);
+  screen.renderFrame();
+  entities.tick();  
+  game.tick();
+  TICK++;
+
 }

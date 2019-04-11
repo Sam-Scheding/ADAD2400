@@ -13,15 +13,11 @@ class Game{
     
     PVector location = PVector.add(player.location, move); // Turns out you can invoke add() statically like this. Much wow.
     Tile tile = map.getOrCreateTile(location);
+
+    hud.setMessage(tile.message);
+
     if(tile.walkable){
       return true;
-    } else {
-      
-      // If the tile the player is trying to move to is a building, then 
-      // Display a message, and ask the player if they want to enter.
-      if(tile.face == 'B'){
-        hud.setMessage(tile.message);
-      }
     }
     return false;
   }
@@ -29,13 +25,17 @@ class Game{
   
   void tick(){
   
-   // If it's a food tile, show the message and replete the player's hunger
+   // This whole thing is messy as fuck
    Tile tile = map.getOrCreateTile(player.location);
-   if(tile.face == '.'){
+   if(tile.face == Faces.FOOD){
      FoodTile food = (FoodTile)tile;
-     hud.setMessage(tile.message);
      player.eat(food.amount);
      Store.saveTile(player.location, new LandTile((int)player.location.x, (int)player.location.y));
+   } else if(tile.face == Faces.DEAD_MOB){
+     DeadEnemyTile food = (DeadEnemyTile)tile;
+     player.eat(food.amount);
+     Store.saveTile(player.location, new LandTile((int)player.location.x, (int)player.location.y));
+   
    }
 
   

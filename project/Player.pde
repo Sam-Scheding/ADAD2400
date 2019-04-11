@@ -2,13 +2,13 @@
 
 class Player extends Mob{
   
-  float attackRadius = 30;
+  float attackRadius = 4; // NUmber of tiles the attack should extend for
   float hunger;
   float maxHunger = 100;
   
   Player(PVector location, float maxHealth){
-     super('@', location, 5, maxHealth);
-     this.icon = '@';
+     super(Faces.PLAYER, location, 5, maxHealth);
+     this.icon = Faces.PLAYER;
      this.hunger = 0;
   }
 
