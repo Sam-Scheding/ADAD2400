@@ -31,6 +31,12 @@ class HUD{
     "\nBuilding: " + Faces.BUILDING
        
       , HUD_X+10, HUD_Y+320);
+
+    Tile tile = map.getOrCreateTile(player.location);
+    
+    text("TILE: " + tile.getClass().getName(), HUD_X+10, HUD_Y+480);
+    text("TILE: " + tile.x + ":" + tile.y, HUD_X+10, HUD_Y+500);
+   
     //text("Building: " + Faces.BUILDING, HUD_X+80, HUD_Y+320);
     //text("Water: " + Faces.WATER, HUD_X+10, HUD_Y+340);
     //text("Enemy: " + Faces.ENEMY, HUD_X+80, HUD_Y+340);

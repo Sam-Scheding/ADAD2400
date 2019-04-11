@@ -7,42 +7,27 @@
 */
 abstract class Tile {
   
+  PVector location;
   int x, y, h, w;
   float pVal;
   String face;
   boolean walkable;
   String message = "";
 
-  Tile(int x, int y){
-    this.x = x;
-    this.y = y;
+  Tile(PVector location){
+    this.location = location;
+    this.x = (int)location.x;
+    this.y = (int)location.y;
     this.h = TILE_HEIGHT;
     this.w = TILE_WIDTH;
     this.pVal = noise(x*NOISE_SCALE, y*NOISE_SCALE) * 255;
-  }
-
-
-  // Invoke this to show hidden special tiles like city centres in development
-  Tile(int x, int y, String face){ 
-    this.x = x;
-    this.y = y;
-    this.h = TILE_HEIGHT;
-    this.w = TILE_WIDTH;
-    this.pVal = noise(x*NOISE_SCALE, y*NOISE_SCALE) * 255;
-    this.face = face;
-
-  }  
-
-  // Return the currect tile's coordinates as a vector
-  PVector location(){
-     return new PVector(x, y); 
   }
 }
 
 class WaterTile extends Tile {
    
-  WaterTile(int x, int y){
-    super(x, y);
+  WaterTile(PVector location){
+    super(location);
     this.face = Faces.WATER;
     this.walkable = false;
   } 
@@ -52,8 +37,8 @@ class WaterTile extends Tile {
 
 class LandTile extends Tile {
    
-  LandTile(int x, int y){
-    super(x, y);
+  LandTile(PVector location){
+    super(location);
     this.face = Faces.LAND;
     this.walkable = true;
 
@@ -63,8 +48,8 @@ class LandTile extends Tile {
 
 class TreeTile extends Tile {
    
-  TreeTile(int x, int y){
-    super(x, y);
+  TreeTile(PVector location){
+    super(location);
     this.face = Faces.TREE;
     this.walkable = false;
     
@@ -85,8 +70,8 @@ class CityCentreTile extends Tile {
 
   int radius;
   
-  CityCentreTile(int x, int y){
-    super(x, y);
+  CityCentreTile(PVector location){
+    super(location);
     this.face = Faces.CITY_CENTRE;
     this.walkable = false;  
     this.radius = (int)random(City.MIN_RADIUS, City.MAX_RADIUS);
@@ -97,10 +82,10 @@ class CityCentreTile extends Tile {
 class BuildingTile extends Tile {
    
   
-  BuildingTile(int x, int y){
-    super(x, y);
+  BuildingTile(PVector location){
+    super(location);
     this.face = Faces.BUILDING;
-    this.walkable = false;
+    this.walkable = true;
     this.message = Messages.BUILDINGS[(int)random(Messages.BUILDINGS.length)];    
   }
  
@@ -109,8 +94,8 @@ class BuildingTile extends Tile {
 class FoodTile extends Tile {
   float amount;
   
-  FoodTile(int x, int y){
-    super(x, y);
+  FoodTile(PVector location){
+    super(location);
     this.face = Faces.FOOD;
     this.walkable = true;
     this.message = Messages.FOOD[(int)random(Messages.FOOD.length)];    
@@ -118,19 +103,22 @@ class FoodTile extends Tile {
   }
 }
 
+class EnemyTile extends Tile {
+  float amount;
+  
+  EnemyTile(PVector location){
+    super(location);
+    this.face = Faces.ENEMY;
+    this.walkable = true;
+    this.message = "";
+  }
+}
+
 class DeadEnemyTile extends Tile {
   float amount;
   
-  DeadEnemyTile(int x, int y){
-    super(x, y);
-    this.face = Faces.DEAD_MOB;
-    this.walkable = true;
-    this.message = Messages.DEAD_ENEMIES[(int)random(Messages.DEAD_ENEMIES.length)];    
-    this.amount = 20;
-  }
-  
   DeadEnemyTile(PVector location){
-    super((int)location.x, (int)location.y);
+    super(location);
     this.face = Faces.DEAD_MOB;
     this.walkable = true;
     this.message = Messages.DEAD_ENEMIES[(int)random(Messages.DEAD_ENEMIES.length)];    

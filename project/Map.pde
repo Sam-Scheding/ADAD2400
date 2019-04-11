@@ -37,8 +37,7 @@ class Map {
       return new PVector(0, 0);
     } // Remove randomness if debugging
 
-    do {
-
+    do { // This is crazy, there's actually a usecase for a do/while loop
       // TODO: Noise is symmetric around (0,0). Figure out why and fix it      
       location = new PVector((int)random(-60000, 60000), (int)random(-60000, 60000));
       tile = getOrCreateTile(location);
@@ -89,17 +88,18 @@ class Map {
    */
   Tile createTile(int x, int y) {
 
+    PVector location = new PVector(x, y);
     Tile tile;
     float val = noise(x * NOISE_SCALE, y * NOISE_SCALE) * 255;
 
     // Check whether Perlin noise dictates whether the tile should be a tree, or water
-    if (val > 170) { return new TreeTile(x, y); } 
-    if (val < 90) { return new WaterTile(x, y); }
+    if (val > 170) { return new TreeTile(location); } 
+    if (val < 90) { return new WaterTile(location); }
 
 
     // If the tile is chosen as a city centre, create the city
     if (random(1) > 1-City.PROBABILITY) { 
-      CityCentreTile cityTile = new CityCentreTile(x, y);
+      CityCentreTile cityTile = new CityCentreTile(location);
       createCity(cityTile); 
       return cityTile;
     }
@@ -107,14 +107,16 @@ class Map {
     // Scatter enemies around the map
     if (random(1) > 1-MOB_PROB) { 
       Enemy enemy = new Enemy(new PVector(x, y)); // Added to the list of entities in the constructor
+      return new EnemyTile(location);
+      
     }
     // Scatter FoodTiles around the map
     if (random(1) > 1-FOOD_PROB) { 
-      FoodTile foodTile = new FoodTile(x, y);
+      FoodTile foodTile = new FoodTile(location);
       return foodTile;
     }
     
-    tile = new LandTile(x, y);
+    tile = new LandTile(location);
     return tile;
   }
   
@@ -134,13 +136,13 @@ class Map {
         
         // Use the radius of the city to create building tiles in a circle within the bounding box
         PVector location = new PVector(x, y);
-        float dist = PVector.dist(location, city.location());
+        float dist = PVector.dist(location, city.location);
         if (dist < city.radius) { // If the tile is within city limits
           if (x % 3 != 0 && y % 3 != 0) { // This creates the 2x2 grid of buildings. i.e. a city block
 
             // Crumble the buildings into the landscape
             if(randomGaussian() * 1/dist < city.radius * 1/10){ // TODO: This needs tweaking
-              Store.saveTile(location, new BuildingTile(x, y));
+              Store.saveTile(location, new BuildingTile(location));
             }
           }
         }
@@ -150,8 +152,9 @@ class Map {
   
   void updateTile(PVector location, Tile tile){
     Store.removeTile(location);
+    println("HERE: " + Store.getTile(location));
     Store.saveTile(location, tile);
-    screen.renderFrame();
+    println("HERE: " + Store.getTile(location));
   }
   // Render the tile to the screen
   void display(Tile tile, int x, int y) {

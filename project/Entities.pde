@@ -61,6 +61,7 @@ abstract class Mob{
   */
   void move(PVector move){
     if(game.validMove(location, move)){ 
+      map.updateTile(location, new LandTile(location));
       location.add(move); 
     }
   }
@@ -73,7 +74,6 @@ abstract class Mob{
   void die(){
 
     map.updateTile(location, (Tile)new DeadEnemyTile(location));
-    screen.renderFrame();
   }
  
  abstract void update();

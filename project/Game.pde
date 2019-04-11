@@ -14,7 +14,6 @@ class Game{
     PVector newLocation = PVector.add(location, move); // Turns out you can invoke add() statically like this. Much wow.
     Tile tile = map.getOrCreateTile(newLocation);
 
-
     if(tile.walkable){
       return true;
     }
@@ -29,11 +28,11 @@ class Game{
    if(tile.face == Faces.FOOD){
      FoodTile food = (FoodTile)tile;
      player.eat(food.amount);
-     Store.saveTile(player.location, new LandTile((int)player.location.x, (int)player.location.y));
+     Store.saveTile(player.location, new LandTile(player.location));
    } else if(tile.face == Faces.DEAD_MOB){
      DeadEnemyTile food = (DeadEnemyTile)tile;
      player.eat(food.amount);
-     Store.saveTile(player.location, new LandTile((int)player.location.x, (int)player.location.y));
+     Store.saveTile(player.location, new LandTile(player.location));
    
    }
 
