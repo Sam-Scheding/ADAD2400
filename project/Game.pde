@@ -30,8 +30,7 @@ class Game{
      player.eat(food.amount);
      Store.saveTile(player.location, new LandTile(player.location));
    } else if(tile.face == Faces.DEAD_MOB){
-     DeadEnemyTile food = (DeadEnemyTile)tile;
-     player.eat(food.amount);
+     player.eat(20);
      Store.saveTile(player.location, new LandTile(player.location));
    
    }

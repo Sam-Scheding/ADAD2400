@@ -152,9 +152,7 @@ class Map {
   
   void updateTile(PVector location, Tile tile){
     Store.removeTile(location);
-    println("HERE: " + Store.getTile(location));
     Store.saveTile(location, tile);
-    println("HERE: " + Store.getTile(location));
   }
   // Render the tile to the screen
   void display(Tile tile, int x, int y) {

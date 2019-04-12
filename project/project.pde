@@ -1,6 +1,6 @@
 
 // Debugging stuff
-boolean DEBUG = false;
+boolean DEBUG = true;
 
 // Procedural Generation Stuff
 int SEED = (int)random(MIN_INT, MAX_INT); // 4,294,967,294 possible worlds

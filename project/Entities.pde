@@ -72,8 +72,8 @@ abstract class Mob{
   }
   
   void die(){
-
-    map.updateTile(location, (Tile)new DeadEnemyTile(location));
+    Tile tile = map.getOrCreateTile(location);
+    tile.face = Faces.DEAD_MOB;
   }
  
  abstract void update();
