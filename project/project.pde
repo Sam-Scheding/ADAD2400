@@ -1,81 +1,46 @@
 
-// Debugging stuff
 boolean DEBUG = true;
 
-// Procedural Generation Stuff
-int SEED = (int)random(MIN_INT, MAX_INT); // 4,294,967,294 possible worlds
-
-
-float MOB_PROB = 0.001;
-float FOOD_PROB = 0.001;
-
-// Perlin Noise Stuff
-float NOISE_SCALE = 0.1;
-
-// Tile Stuff
-int ROWS = 45;
-int COLS = 90;
-int TILE_WIDTH;
-int TILE_HEIGHT;
-
-
-// Size/Shape of the canvas
-int SCREEN_HEIGHT = ceil(ROWS/2); // Vertical radius of the screen
-int SCREEN_WIDTH = ceil(COLS/2); // Horizontal radius of the screen
-PVector[] DIRECTIONS = {
-  new PVector(0,-1),
-  new PVector(-1,0),
-  new PVector(0,1),
-  new PVector(1,0),
-};
-
-// Window Stuff
-int BG_COLOUR = 10;
-int STROKE_COLOUR = 255;
-int HUD_WIDTH = 300;
-int HUD_PADDING = 10;
-int HUD_Y = 0 + HUD_PADDING;
-int HUD_X;
-int HUD_HEIGHT;
 
 Screen screen;
 
 // Game Stuff
-long TICK = 0;
+RNG rng;
 Map map;
 Player player;
 Game game;
-HUD hud;
 Animations animations;
-Entities entities; // Similar to animations
+Enemies enemies; // Similar to animations
+HUD hud;
 
+void settings(){
+
+  fullScreen(); // It's super annoying that this needs to be here, but yeh.
+}
 
 void setup() {
+  
   if(DEBUG){ SEED = MAX_INT; }
-  noiseSeed(SEED); // Set seed for Perlin Noise
-  randomSeed(SEED); // Set seed for other RNG
 
 
-  // Set visual properties
-  fullScreen(); 
-  TILE_WIDTH = floor(width/COLS);
-  TILE_HEIGHT = floor(height/ROWS);
   HUD_HEIGHT = height - HUD_PADDING*2;
   HUD_X = width-HUD_WIDTH-HUD_PADDING;
 
 
   // Generate Objects
-  entities = new Entities();
+  rng = new RNG();
+  hud = new HUD();
+  enemies = new Enemies();
   animations = new Animations();
   map = new Map();  
-  hud = new HUD();
+  player = new Player(map.getRandomWalkableTile(), 100);
+  
   screen = new Screen();
 
-  player = new Player(map.getRandomWalkableTile(), 100);
   game = new Game();
   
   screen.renderFrame();
-  entities.tick();  
+  enemies.tick();  
   game.tick();
 
 
@@ -83,8 +48,10 @@ void setup() {
 
 void draw(){
   
-  // This is a list. If it's empty nothing happens, but if 
-  // animations are added to it, they get played out
+  /* Internally, animations is a list. If it's empty nothing happens, but if 
+   animations are added to it, they get played out. 
+   An animation could be something like the player attack function.
+  */
   animations.renderFrame();
 }
 
@@ -116,7 +83,7 @@ void keyPressed(){
   
   player.move(move);
   screen.renderFrame();
-  entities.tick();  
+  enemies.tick();  
   game.tick();
   TICK++;
 

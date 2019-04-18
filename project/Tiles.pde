@@ -85,7 +85,7 @@ class BuildingTile extends Tile {
   BuildingTile(PVector location){
     super(location);
     this.face = Faces.BUILDING;
-    this.walkable = true;
+    this.walkable = false;
     this.message = Messages.BUILDINGS[(int)random(Messages.BUILDINGS.length)];    
   }
  
@@ -100,6 +100,19 @@ class FoodTile extends Tile {
     this.walkable = true;
     this.message = Messages.FOOD[(int)random(Messages.FOOD.length)];    
     this.amount = 10;
+  }
+}
+
+
+
+class PlayerTile extends Tile {
+  float amount;
+  
+  PlayerTile(PVector location){
+    super(location);
+    this.face = Faces.PLAYER;
+    this.walkable = true; // Hmmm
+    this.message = "";
   }
 }
 

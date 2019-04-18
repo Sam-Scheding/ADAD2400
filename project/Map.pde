@@ -15,7 +15,9 @@
  get fucking huge. Write something that stops this. either:
  - add a variable to each tile counting how many times it's been loaded (hence how important it is)
  - randomly delete half the entries every x turns
+ - Turn it into a DB
  - something smarter
+ 
  */
 class Map {
 
@@ -150,7 +152,7 @@ class Map {
     }
   }
   
-  void updateTile(PVector location, Tile tile){
+  void setTile(PVector location, Tile tile){
     Store.removeTile(location);
     Store.saveTile(location, tile);
   }

@@ -1,37 +1,44 @@
 import java.util.Iterator; 
 /*
-  Entities are objects that move independently in the world, such as enemies
+  
+  
 */
-class Entities{
+class Enemies{
   
-  ArrayList<Mob> entities;
+  public ArrayList<Enemy> enemies;
   
-  Entities(){
-    entities = new ArrayList<Mob>();
+  Enemies(){
+    enemies = new ArrayList<Enemy>();
   }
+  
 
   void tick(){
-    Iterator itr = entities.iterator(); 
+    
+    Iterator itr = enemies.iterator(); 
+    Entity ntt;
+    
     while (itr.hasNext()){ 
-      Mob m = (Mob)itr.next();
-      m.tick();
+      ntt = (Entity)itr.next();
+      ntt.tick();
     }  
   }
   
-  void add(Mob mob){
-    entities.add(mob);
+  void add(Enemy mob){
+    enemies.add(mob);
   }
   
   void damage(PVector location, float radius){
-    Iterator itr = entities.iterator(); 
+    Iterator itr = enemies.iterator(); 
+    Enemy e;
+    
     while (itr.hasNext()){ 
-      Mob m = (Mob)itr.next();
-      float dist = PVector.dist(location, m.location);
+      e = (Enemy)itr.next();
+      float dist = PVector.dist(location, e.location());
       if(dist > 0 && dist < radius){
-        m.health -= player.attackStrength; // Deplete the enemy's health
+        e.health -= player.attackStrength; // Deplete the enemy's health
         // If it has died, remove it from the entities list
-        if(m.health <= 0){
-          m.die();
+        if(e.health <= 0){
+          e.die();
           itr.remove(); 
         }
       }
@@ -39,57 +46,63 @@ class Entities{
   }
 }
 
-abstract class Mob{
+abstract class Entity{
 
-  String icon;
-  PVector location;
-  PVector screenPos;
+  Tile tile;
+  //PVector screenPos;
   float attackStrength;
   float health;
   float maxHealth;
   
-  Mob(String icon, PVector location, float attackStrength, float maxHealth){
-     this.icon = icon;
-     this.location = location;
+  Entity(Tile tile, float attackStrength, float maxHealth){
+     this.tile = tile;
      this.attackStrength = attackStrength;
      this.maxHealth = maxHealth;
      this.health = maxHealth;
-     entities.add(this);
   }
   /*
     Move the entity in the world
   */
   void move(PVector move){
-    if(game.validMove(location, move)){ 
-      map.updateTile(location, new LandTile(location));
-      location.add(move); 
+    if(game.validMove(this.location(), move)){ 
+      map.setTile(this.location(), new LandTile(this.location()));
+      this.location().add(move); 
+      map.setTile(this.location(), this.tile);
     }
   }
+  
+  // Getters
+  String icon(){ return this.tile.face; }
+  PVector location(){ return this.tile.location; }
+  int x(){ return (int)this.tile.location.x; }
+  int y(){ return (int)this.tile.location.y; }
   
   void tick(){
     update();
     display();
   }
-  
-  void die(){
-    Tile tile = map.getOrCreateTile(location);
-    tile.face = Faces.DEAD_MOB;
+   
+  abstract void update();
+
+  void display(){
+    map.setTile(this.location(), this.tile);
+
   }
- 
- abstract void update();
- abstract void display();
+  
+
 
 
 }
 
-class Enemy extends Mob {
+class Enemy extends Entity {
   
   float moveProb = 0.1;
   int state = MobStates.WANDER;
   
   Enemy(PVector location){
-    super(Faces.ENEMY, location, 5, 1);
-    
+    super(new EnemyTile(location), 5, 1);
+    enemies.add(this);
+
   }
   
   void attack(){
@@ -99,10 +112,10 @@ class Enemy extends Mob {
   void update(){
     
     PVector direction = new PVector(0,0);
-    Tile tile = map.getOrCreateTile(location);
+    Tile tile = map.getOrCreateTile(this.location());
 
     // Decide whether the enemy should try to attack the player
-    if(PVector.dist(location, player.location) < 10){
+    if(PVector.dist(this.location(), player.location()) < 10){
       state = MobStates.ATTACK;
     } else {
       state = MobStates.WANDER;
@@ -112,21 +125,21 @@ class Enemy extends Mob {
     if(state == MobStates.WANDER && random(1) > 1-moveProb){
       direction = DIRECTIONS[(int)random(DIRECTIONS.length)];      
     } else if(state == MobStates.ATTACK){
-      direction = PVector.sub(location, player.location);
+      direction = PVector.sub(this.location(), player.location());
       direction.normalize(); 
       direction.rotate(PI);
       if(random(1) > 1-moveProb){ 
         direction = DIRECTIONS[(int)random(DIRECTIONS.length)];  // Enemies are too good, so slow them down a little
       }
     }
+        
     tile.face = Faces.LAND;
     move(direction);
 
   }
   
-  void display(){
-    Tile t = map.getOrCreateTile(location);   
-    t.face = icon;
+  void die(){
+      map.setTile(this.location(), new DeadEnemyTile(this.location()));
   }
   
   

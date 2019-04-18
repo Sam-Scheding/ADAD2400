@@ -2,11 +2,21 @@
   This class handles game rules like whether the player can walk on a particular tile etc.
 */
 
+long TICK = 0;
+
+// Array of valid movement vectors that the player and other mobs can take
+PVector[] DIRECTIONS = {
+  new PVector(0,-1),
+  new PVector(-1,0),
+  new PVector(0,1),
+  new PVector(1,0),
+};
+
+
 class Game{
   
 
   Game(){
-    player.screenPos = screen.getPosition(player.location);
   }
   
   boolean validMove(PVector location, PVector move){
@@ -23,19 +33,18 @@ class Game{
   
   void tick(){
   
-   // This whole thing is messy as fuck
-   Tile tile = map.getOrCreateTile(player.location);
+   // This whole thing is gonna get messy as fuck
+
+   Tile tile = map.getOrCreateTile(player.location());
    if(tile.face == Faces.FOOD){
      FoodTile food = (FoodTile)tile;
      player.eat(food.amount);
-     Store.saveTile(player.location, new LandTile(player.location));
+     Store.saveTile(player.location(), new LandTile(player.location()));
    } else if(tile.face == Faces.DEAD_MOB){
      player.eat(20);
-     Store.saveTile(player.location, new LandTile(player.location));
+     Store.saveTile(player.location(), new LandTile(player.location()));
    
    }
-
-  
   }
 
 }

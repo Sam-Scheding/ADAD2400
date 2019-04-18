@@ -43,7 +43,7 @@ static class Messages{
   };
 
   static String[] DEAD_ENEMIES = {
-    "You've killed the animal,  but it's carcass has already begun to rot. You can only scavenge a meager amount of food.",
+    "You've killed it,  but it's carcass has already begun to rot. You can only scavenge a meager amount of food.",
   };
 
 }

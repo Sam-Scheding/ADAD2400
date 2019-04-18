@@ -1,14 +1,13 @@
 
 
-class Player extends Mob{
+class Player extends Entity{
   
   float attackRadius = 4; // NUmber of tiles the attack should extend for
   float hunger;
   float maxHunger = 100;
   
   Player(PVector location, float maxHealth){
-     super(Faces.PLAYER, location, 5, maxHealth);
-     this.icon = Faces.PLAYER;
+     super(new PlayerTile(location), 5, maxHealth);
      this.hunger = 0;
   }
 
@@ -17,8 +16,8 @@ class Player extends Mob{
     // Creating the animation is as simple as this. 
     // It will be auto added to the list of things to animate, 
     // and then removed when it's finished.
-    new ExplosionAnimation(screenPos, attackRadius);
-    entities.damage(location, attackRadius);
+    new ExplosionAnimation(screen.playerPos, attackRadius);
+    enemies.damage(this.location(), attackRadius);
   }
   void update(){
   
@@ -28,13 +27,19 @@ class Player extends Mob{
    
     fill(200);
     textSize(12);
-    text(this.icon, screenPos.x, screenPos.y); 
+    PVector pos = screen.getPosition(this.location());
+    text(this.icon(), pos.x, pos.y); 
  }
  
  void move(PVector location){
-   super.move(location);
 
-   hud.setMessage(map.getOrCreateTile(this.location).message);
+   if(game.validMove(player.location(), location)){
+     hud.setMessage(map.getOrCreateTile(PVector.add(player.location(), location)).message);
+    
+    if(DEBUG){ hud.currentTile = map.getOrCreateTile(PVector.add(player.location(), location)); }
+   }
+   super.move(location);
+  
    this.hunger += 0.2;
  }
  
