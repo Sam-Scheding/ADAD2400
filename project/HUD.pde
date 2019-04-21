@@ -20,10 +20,10 @@ class HUD{
     
     text("PLAYER", HUD_X+10, HUD_Y+20 );
     text("Location: (" + player.x() + ", " + player.y() + ")", HUD_X+10, HUD_Y+40);
-    text("Health: " + player.health + "/" + player.maxHealth, HUD_X+10, HUD_Y+60);
-    text("Hunger: " + nf(player.hunger, 3, 2) + "/" + player.maxHunger, HUD_X+10, HUD_Y+80);
-    text("Attack Strength: " + player.attackStrength, HUD_X+10, HUD_Y+100);
-    text("Attack Radius: " + player.attackRadius, HUD_X+10, HUD_Y+120);
+    text("Health: " + (int)player.health + "/" + (int)player.maxHealth, HUD_X+10, HUD_Y+60);
+    text("Hunger: " + (int)player.hunger + "/" + (int)player.maxHunger, HUD_X+10, HUD_Y+80);
+    text("Attack Strength: " + (int)player.attackStrength, HUD_X+10, HUD_Y+100);
+    text("Attack Radius: " + (int)player.attackRadius, HUD_X+10, HUD_Y+120);
 
     text("MAP", HUD_X+10, HUD_Y+160 );
     text(this.message, HUD_X+10, HUD_Y+180, HUD_WIDTH-INNER_PADDING, 100);
