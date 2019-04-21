@@ -43,9 +43,9 @@ class Player extends LivingEntity{
   }
  
  boolean move(PVector location){
+   hud.setMessage(map.getOrCreateTile(PVector.add(player.location, location)).message);
    boolean success = super.move(location);
    if(success){
-     hud.setMessage(map.getOrCreateTile(PVector.add(player.location, location)).message);
      if(DEBUG){ hud.currentTile = map.getOrCreateTile(PVector.add(player.location, location)); } // Show the tile the player is walking on in the HUD
    }
    return success;
