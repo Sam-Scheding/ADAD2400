@@ -12,30 +12,13 @@ static class Store{
    static HashMap<PVector, Enemy> enemies = new HashMap<PVector, Enemy>(); ;
    static HashMap<PVector, DeadEnemy> corpses = new HashMap<PVector, DeadEnemy>();
    static HashMap<PVector, Food> food = new HashMap<PVector, Food>(); ;
-
+  
+   // Tiles
    static void saveTile(PVector location, Tile tile){ map.put(location, tile); }
    static Tile getTile(PVector location){ return map.get(location); }
    static void removeTile(PVector location){ map.remove(location); }
    
-   static void saveEnemy(Enemy e){ enemies.put(e.startingLocation, e); }
-   static ArrayList<Enemy> getEnemies(){ return new ArrayList<Enemy>(enemies.values()); }
-   static void removeEnemy(PVector location){ enemies.remove(location); }
- 
-   static ArrayList<DeadEnemy> getDeadEnemies(){ return new ArrayList<DeadEnemy>(corpses.values()); }
-   static void saveDeadEnemy(DeadEnemy e){ corpses.put(e.location, e); }
-  
-   static ArrayList<Entity> getEdible(){
-     List<Food> f = new ArrayList<Food>(food.values());
-     List<DeadEnemy> d = new ArrayList<DeadEnemy>(corpses.values());
-  
-     ArrayList<Entity> edible = new ArrayList<Entity>();
-     edible.addAll(f);
-     edible.addAll(d);
-     return edible;
-   }
-  
-   static void saveFood(Food f){ food.put(f.location, f); }
-
+   // Entities
    static ArrayList<Entity> getEntities(){
      List<Food> f = new ArrayList<Food>(food.values());
      List<DeadEnemy> d = new ArrayList<DeadEnemy>(corpses.values());
@@ -47,5 +30,32 @@ static class Store{
      entities.addAll(e);
      return entities;
    }
+   
+   // Enemies
+   static void saveEnemy(Enemy e){ enemies.put(e.startingLocation, e); }
+   static ArrayList<Enemy> getEnemies(){ return new ArrayList<Enemy>(enemies.values()); }
+   static void removeEnemy(PVector location){ enemies.remove(location); }
+   static ArrayList<DeadEnemy> getDeadEnemies(){ return new ArrayList<DeadEnemy>(corpses.values()); }
+   static void saveDeadEnemy(DeadEnemy e){ corpses.put(e.location, e); }
+  
+   // Edibles
+   static void saveFood(Food f){ food.put(f.location, f); }
+   static void removeEdible(EdibleEntity e){
+     PVector location = e.location;
+     corpses.remove(location);
+     food.remove(location);
+   }
+   
+   static ArrayList<Entity> getEdibles(){
+     List<Food> f = new ArrayList<Food>(food.values());
+     List<DeadEnemy> d = new ArrayList<DeadEnemy>(corpses.values());
+  
+     ArrayList<Entity> edible = new ArrayList<Entity>();
+     edible.addAll(f);
+     edible.addAll(d);
+     return edible;
+   }
+  
+
    
 }

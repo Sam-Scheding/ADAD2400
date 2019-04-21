@@ -15,12 +15,6 @@ PVector[] DIRECTIONS = {
 
 class Game{
   
-
-  Game(){
-  }
-  
-
-  
   boolean validMove(PVector location, PVector move){
     
     PVector newLocation = PVector.add(location, move); // Turns out you can invoke add() statically like this. Much wow.
@@ -32,17 +26,24 @@ class Game{
     return false;
   }
   
+  void gameOver(){
+    
+    screen.popup("GAME OVER");
   
+  }
   void tick(){
-  
-     //Entity e = entities.get(player.location);
-     //if(e == null){ return; } // No entity at player location
+      
+     ArrayList<Entity> edibles = Store.getEdibles();
+     Iterator itr = edibles.iterator();
+     EdibleEntity e;
+     while(itr.hasNext()){
+         e = (EdibleEntity)itr.next();
+         if((int)e.location.x == player.x() && (int)e.location.y == player.y()){
+            player.eat(e.amount);
+            Store.removeEdible(e);
+         }
+     }
      
-     ////if(tile.face in Store.edible) // TODO
-     //if(e.icon() == Faces.FOOD || e.icon() == Faces.DEAD_MOB){
-     //  player.eat(20);
-     //  println("Trying to remove: ");
-     //  entities.remove(player.location);
-     //}
+     
   }
 }

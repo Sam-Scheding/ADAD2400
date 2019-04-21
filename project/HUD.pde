@@ -42,14 +42,12 @@ class HUD{
     
     if(DEBUG){
       text("TILE: " + this.currentTile, HUD_X+10, HUD_Y+480);
-      text("ENEMIES: ", HUD_X+10, HUD_Y+500);
-      String enemies = "";
-      for(Enemy e: Store.getEnemies()){
-        if(e.icon() == Faces.ENEMY){
-          enemies += String.format("(%d, %d)\n", (int)e.x(), (int)e.y());
-        }
+      text("Edibles: ", HUD_X+10, HUD_Y+500);
+      String entities = "";
+      for(Entity e: Store.getEdibles()){
+        entities += String.format("(%d, %d)\n", (int)e.x(), (int)e.y());
       }
-      text(enemies, HUD_X + 10, HUD_Y + 530);
+      text(entities, HUD_X + 10, HUD_Y + 530);
     }
     
 

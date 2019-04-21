@@ -1,17 +1,21 @@
+float PLAYER_HEALTH = 100;
+float MIN_HUNGER = 0;
+float MAX_HUNGER = 100;
 
-
-class Player extends Entity{
+class Player extends LivingEntity{
   
   float attackRadius = 4; // NUmber of tiles the attack should extend for
   float attackStrength = 5; // Damage the attack does to entities inside the radius
   float hunger;
-  float maxHunger = 100;
+  float maxHunger;
   float maxHealth;
   
-  Player(PVector location, float maxHealth){
-     super(location, new PlayerOverlay());
+  Player(PVector location){
+     super(location, new PlayerOverlay(), PLAYER_HEALTH);
      this.hunger = 0;
-     this.maxHealth = maxHealth;
+     this.maxHunger = MAX_HUNGER;
+     this.maxHealth = PLAYER_HEALTH;
+     this.health = PLAYER_HEALTH;
      this.movable = true;
   }
 
@@ -35,10 +39,14 @@ class Player extends Entity{
  }
  
   void eat(float amount){
-    this.hunger -= amount;
-    this.hunger = constrain(this.hunger, 0, maxHunger);
+    this.hunger = constrain(this.hunger - amount, 0, maxHunger);
 
   }
   
-  void tick(){};
+  void tick(){
+    if(this.health <= this.minHealth){
+      game.gameOver();
+    }
+  
+  };
 }

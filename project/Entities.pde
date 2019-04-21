@@ -1,10 +1,9 @@
 import java.util.Iterator; 
 
+float ENEMY_ATTACK_STRENGTH = 5;
+float ENEMY_MAX_HEALTH = 4;
+
 class Entities{
-  
-  
-  Entities(){   
-  }
   
   void display(){
     for(Entity e: Store.getEntities()){
@@ -16,16 +15,13 @@ class Entities{
     
     // if an enemy should be generated
     if (random(1) > 1-ENEMY_PROB) { 
-      Enemy enemy = new Enemy(location); // Added to the list of entities in the constructor
-      this.addEnemy(enemy);
+      Store.saveEnemy(new Enemy(location));
     }
     
     // Scatter Food around the map
     if (random(1) > 1-FOOD_PROB) { 
-      Food food = new Food(location);
-      this.addFood(food);
+      Store.saveFood(new Food(location));
     }
-
   }
 
   void tick(){
@@ -38,67 +34,35 @@ class Entities{
       e.tick();
     }
   }
-  
-  void addEnemy(Enemy e){ Store.saveEnemy(e); }
-  void addFood(Food f){ Store.saveFood(f); }
-  
+   
   
   void damage(PVector location, float radius){
     Iterator itr = Store.getEnemies().iterator(); 
     Enemy e;
     
+    // TODO: Rather than iterating over every entity, it's probably faster to get every entity within the radius
     while (itr.hasNext()){ 
       e = (Enemy)itr.next();
       float dist = PVector.dist(location, e.location);
-      if(dist > 0 && dist < radius){
-        e.health -= player.attackStrength; // Deplete the enemy's health
-        // If it has died, remove it from the entities list
-        if(e.health <= 0){
-          Store.removeEnemy(e.startingLocation);
-          Store.saveDeadEnemy(new DeadEnemy(e.location));
-        }
+      if(dist >= 0 && dist < radius){
+        e.takeDamage(player.attackStrength); // Deplete the enemy's health
       }
     }  
   }
-  
-  Entity get(PVector location){
-    for(Entity e: Store.getEntities()){
-      if(e.location == location){ return e; }
-    }    
-    return null;
-  }
-
 }
 
 
 abstract class Entity{
 
-  PVector location, startingLocation;
+  PVector location;
   Overlay overlay;
-  float health;
-  float maxHealth;
   boolean movable;
   
   Entity(PVector location, Overlay overlay){
      this.location = location;
-     this.startingLocation = location.copy();
      this.overlay = overlay;
-     this.health = maxHealth;
   }
-  
-  /*
-    Move the entity in the world
-  */
-  boolean move(PVector move){
-    boolean valid = game.validMove(this.location, move);
-    if(valid && this.movable){ 
-      this.location.add(move);
-    }
-    return valid && this.movable;
-  }
-  
-  
-  
+
   // Getters
   String icon(){ return this.overlay.face; }
   int x(){ return (int)this.location.x; }
@@ -113,45 +77,93 @@ abstract class Entity{
   }
 }
 
-class Food extends Entity {
+class EdibleEntity extends Entity{
   
-  PVector location;
+  float amount;
   
-  Food(PVector location){
-    super(location, new FoodOverlay());
-    movable = false;
-  }
-}
-
-
-class DeadEnemy extends Entity {
-
-  
-  DeadEnemy(PVector location){
-    super(location, new DeadEnemyOverlay());
+  EdibleEntity(PVector location, Overlay overlay){
+    super(location, overlay);
     this.movable = false;
   }
   
 }
 
+class LivingEntity extends Entity{
 
-class Enemy extends Entity {
+  PVector startingLocation;
+  float attackStrength;
+  float attackRadius;
+  float health;
+  float minHealth = 0;
+  float maxHealth;
+
+  LivingEntity(PVector location, Overlay overlay, float maxHealth){
+    super(location, overlay);
+    this.startingLocation = location.copy();
+    this.movable = true;
+    this.health = maxHealth;
+    this.maxHealth = maxHealth;
+  }
+
+  /*
+    Move the entity in the world
+  */
+  boolean move(PVector direction){
+    boolean valid = game.validMove(this.location, direction);
+    if(valid && this.movable){ 
+      this.location.add(direction);
+    }
+    return valid && this.movable;
+  }
+  
+  void takeDamage(float amount){
+    println(String.format("%f < %f - %f < %f", this.minHealth, this.health, amount, this.maxHealth));
+    this.health = constrain(this.health - amount, this.minHealth, this.maxHealth);
+    if(this.health <= minHealth){
+      Store.removeEnemy(this.startingLocation);
+      Store.saveDeadEnemy(new DeadEnemy(this.location));
+    }
+  }
+}
+
+class Food extends EdibleEntity {
+  
+  PVector location;
+  
+  Food(PVector location){
+    super(location, new FoodOverlay());
+    this.amount = 5;
+  }
+}
+
+
+class DeadEnemy extends EdibleEntity {
+  
+  DeadEnemy(PVector location){
+    super(location, new DeadEnemyOverlay());
+    this.amount = 10;
+  }
+}
+
+
+class Enemy extends LivingEntity {
   
   float moveProb = 0.1;
-  int state;
-  int attackStrength = 5;
-  int attackRadius = 1;
-  int health = 5;
-  int maxHealth = 5;
+  int state; // WANDER|ATTACK
   
   Enemy(PVector location){
-    super(location, new EnemyOverlay());
+    super(location, new EnemyOverlay(), ENEMY_MAX_HEALTH);
     this.state = MobStates.WANDER;
     this.movable = true;
+    this.attackRadius = 1;
+    this.attackStrength = ENEMY_ATTACK_STRENGTH;
   }
   
   void attack(){
-  
+    if(PVector.dist(this.location, player.location) <= this.attackRadius){
+      println("HERE: " + this.attackStrength);
+      player.takeDamage(this.attackStrength);
+    }
   }
   
   void tick(){
@@ -170,7 +182,7 @@ class Enemy extends Entity {
         direction = DIRECTIONS[(int)random(DIRECTIONS.length)];      
       } else if(state == MobStates.ATTACK){
         direction = PVector.sub(this.location, player.location);
-        direction.limit(1.49); 
+        direction.limit(1.49);
         direction.rotate(PI);
         direction.x = (int)direction.x;
         direction.y = (int)direction.y;
@@ -181,5 +193,6 @@ class Enemy extends Entity {
       }
           
       this.move(direction);
+      this.attack();
   }
 }

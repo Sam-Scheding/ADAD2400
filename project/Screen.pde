@@ -79,6 +79,11 @@ class Screen{
     return false;
   }
   
+  void popup(String text){
+    text(text, width/2, height/2);
+  }
+  
+  
   PVector getPosition(PVector location){
 
     // Map the entity's global coordinates on the map to a position on the screen

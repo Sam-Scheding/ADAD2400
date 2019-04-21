@@ -10,7 +10,7 @@ Map map;
 Player player;
 Game game;
 Animations animations;
-Entities entities; // Similar to animations
+Entities entities;
 HUD hud;
 
 void settings(){
@@ -26,22 +26,22 @@ void setup() {
   HUD_HEIGHT = height - HUD_PADDING*2;
   HUD_X = width-HUD_WIDTH-HUD_PADDING;
 
-
   // Generate Objects
+  game = new Game();
   rng = new RNG();
   hud = new HUD();
-  entities = new Entities();
   animations = new Animations();
+  entities = new Entities();
   map = new Map();  
-  player = new Player(map.getRandomWalkableTile(), 100);
-  
+  player = new Player(map.getRandomWalkableTile());
   screen = new Screen();
 
-  game = new Game();
   
-  screen.renderFrame();
+
+  
   entities.tick();
   game.tick();
+  screen.renderFrame();
 
 
 }
