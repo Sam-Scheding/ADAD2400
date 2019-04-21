@@ -20,7 +20,6 @@ void settings(){
 
 void setup() {
   
-  if(DEBUG){ SEED = MAX_INT; }
 
 
   HUD_HEIGHT = height - HUD_PADDING*2;
@@ -28,26 +27,17 @@ void setup() {
 
   // Generate Objects
   game = new Game();
-  rng = new RNG();
-  hud = new HUD();
-  animations = new Animations();
-  entities = new Entities();
-  map = new Map();  
-  player = new Player(map.getRandomWalkableTile());
-  screen = new Screen();
-
-  
-
-  
-  entities.tick();
-  game.tick();
-  screen.renderFrame();
+  game.newGame();
 
 
 }
 
 void draw(){
   
+  if(game.state == GAME_OVER){
+    delay(3000);
+    game.newGame();
+  }
   /* Internally, animations is a list. If it's empty nothing happens, but if 
    animations are added to it, they get played out. 
    An animation could be something like the player attack function.
@@ -81,10 +71,10 @@ void keyPressed(){
     return;
   }
   
+  // Since this is a turn based game, we only need to update it
+  // whenever input is given
   player.move(move);
+  player.tick();  
   entities.tick();  
   game.tick();
-  screen.renderFrame();
-  TICK++;
-
 }

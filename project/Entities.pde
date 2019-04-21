@@ -13,8 +13,9 @@ class Entities{
   
   void generate(PVector location){
     
+    Tile tile = map.getOrCreateTile(location);
     // if an enemy should be generated
-    if (random(1) > 1-ENEMY_PROB) { 
+    if (random(1) > 1-ENEMY_PROB && tile.walkable) { 
       Store.saveEnemy(new Enemy(location));
     }
     
@@ -33,21 +34,6 @@ class Entities{
       e = (Enemy)itr.next();
       e.tick();
     }
-  }
-   
-  
-  void damage(PVector location, float radius){
-    Iterator itr = Store.getEnemies().iterator(); 
-    Enemy e;
-    
-    // TODO: Rather than iterating over every entity, it's probably faster to get every entity within the radius
-    while (itr.hasNext()){ 
-      e = (Enemy)itr.next();
-      float dist = PVector.dist(location, e.location);
-      if(dist >= 0 && dist < radius){
-        e.takeDamage(player.attackStrength); // Deplete the enemy's health
-      }
-    }  
   }
 }
 
@@ -117,7 +103,7 @@ class LivingEntity extends Entity{
   }
   
   void takeDamage(float amount){
-    println(String.format("%f < %f - %f < %f", this.minHealth, this.health, amount, this.maxHealth));
+    //println(String.format("%f < %f - %f < %f", this.minHealth, this.health, amount, this.maxHealth));
     this.health = constrain(this.health - amount, this.minHealth, this.maxHealth);
     if(this.health <= minHealth){
       Store.removeEnemy(this.startingLocation);

@@ -80,7 +80,11 @@ class Screen{
   }
   
   void popup(String text){
-    text(text, width/2, height/2);
+    background(BG_COLOUR);
+    stroke(200);
+    textSize(52);
+    //rect(0, 0, width, height);
+    text(text, width/2-100, height/2);
   }
   
   
