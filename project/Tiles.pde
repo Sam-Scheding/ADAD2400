@@ -1,5 +1,36 @@
 
+abstract class Overlay {
+  
+  String face;
 
+}
+
+
+
+class PlayerOverlay extends Overlay {
+  
+  PlayerOverlay(){
+    super();
+    this.face = Faces.PLAYER;
+  }
+}
+
+class EnemyOverlay extends Overlay {
+  
+  
+  EnemyOverlay(){
+    super();
+    this.face = Faces.ENEMY;
+  }
+}
+
+class DeadEnemyOverlay extends Overlay {
+
+  DeadEnemyOverlay(){
+    super();
+    this.face = Faces.DEAD_MOB;
+  }
+}
 
 /*
   This is the Base Tile class. You should never instantiate one of these (hence why it's abstract).
@@ -100,41 +131,5 @@ class FoodTile extends Tile {
     this.walkable = true;
     this.message = Messages.FOOD[(int)random(Messages.FOOD.length)];    
     this.amount = 10;
-  }
-}
-
-
-
-class PlayerTile extends Tile {
-  float amount;
-  
-  PlayerTile(PVector location){
-    super(location);
-    this.face = Faces.PLAYER;
-    this.walkable = true; // Hmmm
-    this.message = "";
-  }
-}
-
-class EnemyTile extends Tile {
-  float amount;
-  
-  EnemyTile(PVector location){
-    super(location);
-    this.face = Faces.ENEMY;
-    this.walkable = true;
-    this.message = "";
-  }
-}
-
-class DeadEnemyTile extends Tile {
-  float amount;
-  
-  DeadEnemyTile(PVector location){
-    super(location);
-    this.face = Faces.DEAD_MOB;
-    this.walkable = true;
-    this.message = Messages.DEAD_ENEMIES[(int)random(Messages.DEAD_ENEMIES.length)];    
-    this.amount = 20;
   }
 }

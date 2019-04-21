@@ -37,20 +37,19 @@ class HUD{
     "\nEnemy: " + Faces.ENEMY +
     "\nFood: " + Faces.FOOD +
     "\nBuilding: " + Faces.BUILDING
-       
-      , HUD_X+10, HUD_Y+320);
+    , HUD_X+10, HUD_Y+320);
 
     
     if(DEBUG){
       text("TILE: " + this.currentTile, HUD_X+10, HUD_Y+480);
       text("ENEMIES: ", HUD_X+10, HUD_Y+500);
       String enemies = "";
-      //for(Enemy e: enemies.enemies){
-      //  if(e.icon() == Faces.ENEMY){
-      //    enemies += String.format("(%d, %d)\n", (int)e.x(), (int)e.y());
-      //  }
-      //}
-      //text(enemies, HUD_X + 10, HUD_Y + 530);
+      for(Enemy e: entities.monsters){
+        if(e.icon() == Faces.ENEMY){
+          enemies += String.format("(%d, %d)\n", (int)e.x(), (int)e.y());
+        }
+      }
+      text(enemies, HUD_X + 10, HUD_Y + 530);
     }
     
 

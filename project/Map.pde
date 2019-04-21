@@ -62,8 +62,10 @@ class Map {
     // seen this tile, or they have been away for so long the tile has unloaded.
     // So make a new tile and add it to the map for later
     if (tile == null) {
-      tile = createTile(x, y);
-      Store.saveTile(location, tile);
+      tile = createTile(location);
+      Store.saveTile(location, tile);      
+      entities.generate(location);
+
     }     
     return tile;
   }
@@ -88,11 +90,10 @@ class Map {
    
    This isn't perfect, since it's difficult to extend upon, but it's good for now.
    */
-  Tile createTile(int x, int y) {
+  Tile createTile(PVector location) {
 
-    PVector location = new PVector(x, y);
     Tile tile;
-    float val = noise(x * NOISE_SCALE, y * NOISE_SCALE) * 255;
+    float val = noise(location.x * NOISE_SCALE, location.y * NOISE_SCALE) * 255;
 
     // Check whether Perlin noise dictates whether the tile should be a tree, or water
     if (val > 170) { return new TreeTile(location); } 
@@ -106,12 +107,6 @@ class Map {
       return cityTile;
     }
 
-    // Scatter enemies around the map
-    if (random(1) > 1-MOB_PROB) { 
-      Enemy enemy = new Enemy(new PVector(x, y)); // Added to the list of entities in the constructor
-      return new EnemyTile(location);
-      
-    }
     // Scatter FoodTiles around the map
     if (random(1) > 1-FOOD_PROB) { 
       FoodTile foodTile = new FoodTile(location);
@@ -152,10 +147,9 @@ class Map {
     }
   }
   
-  void setTile(PVector location, Tile tile){
-    Store.removeTile(location);
-    Store.saveTile(location, tile);
-  }
+  //void setTile(PVector location, Tile tile){
+  //  Store.saveTile(location, tile);
+  //}
   // Render the tile to the screen
   void display(Tile tile, int x, int y) {
     text(tile.face, x*tile.w, y*tile.h);

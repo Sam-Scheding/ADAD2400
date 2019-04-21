@@ -22,7 +22,7 @@ class Screen{
 
     TILE_WIDTH = floor(width/COLS);
     TILE_HEIGHT = floor(height/ROWS);
-    playerPos = this.getPosition(player.location());
+    playerPos = this.getPosition(player.location);
 
   }
   
@@ -49,19 +49,19 @@ class Screen{
     for (int y = (int)player.y() - CANVAS_VRAD; y <= player.y()+CANVAS_VRAD; y++) {
       for (int x = (int)player.x()-CANVAS_HRAD; x <= player.x()+CANVAS_HRAD; x++) {
         
-        // Regardless of whether the tile is displayed, we still need to create it. 
-        // It might be a city in the distance or something
+
         tile = map.getOrCreateTile(x, y);
         map.display(tile, col, row);
-        //println(x + ":" + y);
+                
         col++;
       }
       row++;
       col=0;
     }
     
-    //Then overlay the player on the map
+    entities.display();
     player.display();
+    //Then overlay the hud onto the screen
     hud.display();
   }
   

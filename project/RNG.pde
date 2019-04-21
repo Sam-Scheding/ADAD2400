@@ -2,7 +2,7 @@
 // Procedural Generation Stuff
 int SEED = (int)random(MIN_INT, MAX_INT); // 4,294,967,294 possible worlds
 
-float MOB_PROB = 0.001;
+float ENEMY_PROB = 0.001;
 float FOOD_PROB = 0.003;
 
 // Perlin Noise Stuff

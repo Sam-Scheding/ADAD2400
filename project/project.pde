@@ -10,7 +10,7 @@ Map map;
 Player player;
 Game game;
 Animations animations;
-Enemies enemies; // Similar to animations
+Entities entities; // Similar to animations
 HUD hud;
 
 void settings(){
@@ -30,7 +30,7 @@ void setup() {
   // Generate Objects
   rng = new RNG();
   hud = new HUD();
-  enemies = new Enemies();
+  entities = new Entities();
   animations = new Animations();
   map = new Map();  
   player = new Player(map.getRandomWalkableTile(), 100);
@@ -40,7 +40,7 @@ void setup() {
   game = new Game();
   
   screen.renderFrame();
-  enemies.tick();  
+  entities.tick();  
   game.tick();
 
 
@@ -82,9 +82,9 @@ void keyPressed(){
   }
   
   player.move(move);
-  screen.renderFrame();
-  enemies.tick();  
+  entities.tick();  
   game.tick();
+  screen.renderFrame();
   TICK++;
 
 }

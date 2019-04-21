@@ -3,12 +3,16 @@
 class Player extends Entity{
   
   float attackRadius = 4; // NUmber of tiles the attack should extend for
+  float attackStrength = 5; // Damage the attack does to entities inside the radius
   float hunger;
   float maxHunger = 100;
+  float maxHealth;
   
   Player(PVector location, float maxHealth){
-     super(new PlayerTile(location), 5, maxHealth);
+     super(location, new PlayerOverlay());
      this.hunger = 0;
+     this.maxHealth = maxHealth;
+     this.movable = true;
   }
 
   
@@ -17,34 +21,24 @@ class Player extends Entity{
     // It will be auto added to the list of things to animate, 
     // and then removed when it's finished.
     new ExplosionAnimation(screen.playerPos, attackRadius);
-    enemies.damage(this.location(), attackRadius);
+    entities.damage(this.location, attackRadius);
   }
-  void update(){
-  
-  } 
-
-  void display(){
-   
-    fill(200);
-    textSize(12);
-    PVector pos = screen.getPosition(this.location());
-    text(this.icon(), pos.x, pos.y); 
- }
  
- void move(PVector location){
-
-   if(game.validMove(player.location(), location)){
-     hud.setMessage(map.getOrCreateTile(PVector.add(player.location(), location)).message);
-    
-    if(DEBUG){ hud.currentTile = map.getOrCreateTile(PVector.add(player.location(), location)); }
+ boolean move(PVector location){
+   boolean success = super.move(location);
+   if(success){
+     hud.setMessage(map.getOrCreateTile(PVector.add(player.location, location)).message);
+     if(DEBUG){ hud.currentTile = map.getOrCreateTile(PVector.add(player.location, location)); } // Show the tile the player is walking on in the HUD
    }
-   super.move(location);
-  
    this.hunger += 0.2;
+   return success;
  }
  
   void eat(float amount){
     this.hunger -= amount;
     this.hunger = constrain(this.hunger, 0, maxHunger);
+
   }
+  
+  void tick(){};
 }

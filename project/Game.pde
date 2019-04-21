@@ -19,6 +19,8 @@ class Game{
   Game(){
   }
   
+
+  
   boolean validMove(PVector location, PVector move){
     
     PVector newLocation = PVector.add(location, move); // Turns out you can invoke add() statically like this. Much wow.
@@ -33,18 +35,14 @@ class Game{
   
   void tick(){
   
-   // This whole thing is gonna get messy as fuck
-
-   Tile tile = map.getOrCreateTile(player.location());
-   if(tile.face == Faces.FOOD){
-     FoodTile food = (FoodTile)tile;
-     player.eat(food.amount);
-     Store.saveTile(player.location(), new LandTile(player.location()));
-   } else if(tile.face == Faces.DEAD_MOB){
-     player.eat(20);
-     Store.saveTile(player.location(), new LandTile(player.location()));
-   
-   }
+     Entity e = entities.get(player.location);
+     if(e == null){ return; } // No entity at player locationd
+     
+     //if(tile.face in Store.edible) // TODO
+     if(e.icon() == Faces.FOOD || e.icon() == Faces.DEAD_MOB){
+       player.eat(20);
+       println("Trying to remove: ");
+       entities.remove(player.location);
+     }
   }
-
 }
