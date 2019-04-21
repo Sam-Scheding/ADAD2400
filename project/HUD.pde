@@ -44,7 +44,7 @@ class HUD{
       text("TILE: " + this.currentTile, HUD_X+10, HUD_Y+480);
       text("ENEMIES: ", HUD_X+10, HUD_Y+500);
       String enemies = "";
-      for(Enemy e: entities.monsters){
+      for(Enemy e: Store.getEnemies()){
         if(e.icon() == Faces.ENEMY){
           enemies += String.format("(%d, %d)\n", (int)e.x(), (int)e.y());
         }

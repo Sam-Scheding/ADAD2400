@@ -1,21 +1,13 @@
 import java.util.Iterator; 
-/*
-  
-  
-*/
+
 class Entities{
   
-  // This desperately needs to be done with a DB
-  public ArrayList<Enemy> monsters;
-  public ArrayList<DeadEnemy> corpses;
   
   Entities(){   
-    monsters = new ArrayList<Enemy>();
-    corpses = new ArrayList<DeadEnemy>();
   }
   
   void display(){
-    for(Entity e: getEntities()){
+    for(Entity e: Store.getEntities()){
       e.display();
     }
   }
@@ -24,39 +16,35 @@ class Entities{
     
     // if an enemy should be generated
     if (random(1) > 1-ENEMY_PROB) { 
-      println("Generated a new enemy");
       Enemy enemy = new Enemy(location); // Added to the list of entities in the constructor
       this.addEnemy(enemy);
     }
+    
+    // Scatter Food around the map
+    if (random(1) > 1-FOOD_PROB) { 
+      Food food = new Food(location);
+      this.addFood(food);
+    }
+
   }
 
   void tick(){
     
-    Iterator itr = this.getEntities().iterator(); 
-    Entity e;
+    Iterator itr = Store.getEnemies().iterator(); 
+    Enemy e;
     
     while (itr.hasNext()){ 
-      e = (Entity)itr.next();
+      e = (Enemy)itr.next();
       e.tick();
     }
   }
   
-  void addEnemy(Enemy e){
-    this.monsters.add(e);
-  }
+  void addEnemy(Enemy e){ Store.saveEnemy(e); }
+  void addFood(Food f){ Store.saveFood(f); }
   
   
-   ArrayList<Entity> getEntities(){
-   
-     ArrayList<Entity> entities = new ArrayList<Entity>();
-     entities.addAll(monsters);
-     entities.addAll(corpses);
-     //entities.addAll(food); // TODO
-     return entities;
-   }
-
   void damage(PVector location, float radius){
-    Iterator itr = monsters.iterator(); 
+    Iterator itr = Store.getEnemies().iterator(); 
     Enemy e;
     
     while (itr.hasNext()){ 
@@ -66,33 +54,18 @@ class Entities{
         e.health -= player.attackStrength; // Deplete the enemy's health
         // If it has died, remove it from the entities list
         if(e.health <= 0){
-          corpses.add(new DeadEnemy(e.location));
-          itr.remove(); 
+          Store.removeEnemy(e.startingLocation);
+          Store.saveDeadEnemy(new DeadEnemy(e.location));
         }
       }
     }  
   }
   
   Entity get(PVector location){
-    for(Entity e: this.getEntities()){
-      if(e.location == location){
-        return e;
-      }
+    for(Entity e: Store.getEntities()){
+      if(e.location == location){ return e; }
     }    
     return null;
-  }
-  
-  void remove(PVector location){
-    Iterator itr = this.getEntities().iterator(); 
-    Entity e;
-    
-    while (itr.hasNext()){ 
-      e = (Entity)itr.next();
-      if(e.location == location && e.icon() != Faces.PLAYER){
-        println("Removed: " + e.icon());
-        itr.remove();
-      }
-    }
   }
 
 }
@@ -100,7 +73,7 @@ class Entities{
 
 abstract class Entity{
 
-  PVector location;
+  PVector location, startingLocation;
   Overlay overlay;
   float health;
   float maxHealth;
@@ -108,6 +81,7 @@ abstract class Entity{
   
   Entity(PVector location, Overlay overlay){
      this.location = location;
+     this.startingLocation = location.copy();
      this.overlay = overlay;
      this.health = maxHealth;
   }
@@ -137,11 +111,18 @@ abstract class Entity{
     //println(String.format("Drawing: %s at (%d, %d)", this.icon(), (int)pos.x, (int)pos.y));
     text(this.icon(), pos.x, pos.y); 
   }
-  
-  abstract void tick();
-
-
 }
+
+class Food extends Entity {
+  
+  PVector location;
+  
+  Food(PVector location){
+    super(location, new FoodOverlay());
+    movable = false;
+  }
+}
+
 
 class DeadEnemy extends Entity {
 
@@ -151,9 +132,6 @@ class DeadEnemy extends Entity {
     this.movable = false;
   }
   
-  void tick(){
-  
-  }
 }
 
 
@@ -192,8 +170,10 @@ class Enemy extends Entity {
         direction = DIRECTIONS[(int)random(DIRECTIONS.length)];      
       } else if(state == MobStates.ATTACK){
         direction = PVector.sub(this.location, player.location);
-        direction.normalize(); 
+        direction.limit(1.49); 
         direction.rotate(PI);
+        direction.x = (int)direction.x;
+        direction.y = (int)direction.y;
         //println(direction);
         if(random(1) > 1-moveProb){ 
           direction = DIRECTIONS[(int)random(DIRECTIONS.length)];  // Enemies are too good, so slow them down a little

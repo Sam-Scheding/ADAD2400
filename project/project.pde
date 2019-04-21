@@ -1,5 +1,5 @@
 
-boolean DEBUG = true;
+boolean DEBUG = false;
 
 
 Screen screen;
@@ -40,7 +40,7 @@ void setup() {
   game = new Game();
   
   screen.renderFrame();
-  entities.tick();  
+  entities.tick();
   game.tick();
 
 

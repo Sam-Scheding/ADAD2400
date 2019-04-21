@@ -106,12 +106,6 @@ class Map {
       createCity(cityTile); 
       return cityTile;
     }
-
-    // Scatter FoodTiles around the map
-    if (random(1) > 1-FOOD_PROB) { 
-      FoodTile foodTile = new FoodTile(location);
-      return foodTile;
-    }
     
     tile = new LandTile(location);
     return tile;

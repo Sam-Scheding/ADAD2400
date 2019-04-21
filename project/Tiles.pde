@@ -5,7 +5,12 @@ abstract class Overlay {
 
 }
 
-
+class FoodOverlay extends Overlay {
+  FoodOverlay(){
+    super();
+    this.face = Faces.FOOD;
+  }
+}
 
 class PlayerOverlay extends Overlay {
   

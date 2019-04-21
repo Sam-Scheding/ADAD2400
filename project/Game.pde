@@ -35,14 +35,14 @@ class Game{
   
   void tick(){
   
-     Entity e = entities.get(player.location);
-     if(e == null){ return; } // No entity at player locationd
+     //Entity e = entities.get(player.location);
+     //if(e == null){ return; } // No entity at player location
      
-     //if(tile.face in Store.edible) // TODO
-     if(e.icon() == Faces.FOOD || e.icon() == Faces.DEAD_MOB){
-       player.eat(20);
-       println("Trying to remove: ");
-       entities.remove(player.location);
-     }
+     ////if(tile.face in Store.edible) // TODO
+     //if(e.icon() == Faces.FOOD || e.icon() == Faces.DEAD_MOB){
+     //  player.eat(20);
+     //  println("Trying to remove: ");
+     //  entities.remove(player.location);
+     //}
   }
 }
