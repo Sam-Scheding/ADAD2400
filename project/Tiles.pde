@@ -49,7 +49,8 @@ abstract class Tile {
   String face;
   boolean walkable;
   String message = "";
-
+  color colour;
+  
   Tile(PVector location){
     this.location = location;
     this.x = (int)location.x;

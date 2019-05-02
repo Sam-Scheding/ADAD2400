@@ -1,4 +1,5 @@
 
+boolean COLOURED = true;
 int BG_COLOUR = 10;
 int STROKE_COLOUR = 255;
 
@@ -36,6 +37,8 @@ class Screen{
   
   */
   void renderFrame(){
+    
+        
     Tile tile;
   
     background(BG_COLOUR);

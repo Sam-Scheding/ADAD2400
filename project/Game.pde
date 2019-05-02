@@ -46,6 +46,8 @@ class Game{
     player = new Player(map.getRandomWalkableTile());
     screen = new Screen();
     
+    controller = new Controller();
+    
     entities.tick();
     game.tick();
     screen.renderFrame();
@@ -75,10 +77,10 @@ class Game{
        }
      }
     
-    if(this.state == GAME_BEGUN){
-      screen.renderFrame();
-      TICK++;
-    }
+     if(this.state == GAME_BEGUN){
+       screen.renderFrame();
+       TICK++;
+     }
 
   }
 }

@@ -1,6 +1,10 @@
+import org.openkinect.processing.*;
+
+
+Kinect2 kinect2;
 
 boolean DEBUG = false;
-
+boolean SHOW_CONTROLLER = false;
 
 Screen screen;
 
@@ -13,6 +17,9 @@ Animations animations;
 Entities entities;
 HUD hud;
 
+
+Controller controller;
+
 void settings(){
 
   fullScreen(); // It's super annoying that this needs to be here, but yeh.
@@ -20,7 +27,12 @@ void settings(){
 
 void setup() {
   
-
+  try{
+   kinect2 = new Kinect2(this);
+  } catch(NullPointerException e){
+    println("Couldn't find the Kinect. Are you sure it's attached?");
+    exit();
+  }
 
   HUD_HEIGHT = height - HUD_PADDING*2;
   HUD_X = width-HUD_WIDTH-HUD_PADDING;
@@ -34,6 +46,14 @@ void setup() {
 
 void draw(){
   
+  
+  if(SHOW_CONTROLLER){
+    background(0);
+
+    controller.display();
+    return;
+  }
+
   if(game.state == GAME_OVER){
     delay(3000);
     game.newGame();
@@ -52,6 +72,12 @@ void stop(){
 void keyPressed(){
   PVector move = new PVector(0, 0);
 
+  if(key == '?'){
+
+    SHOW_CONTROLLER = !SHOW_CONTROLLER;
+    screen.renderFrame();
+  }
+  
   if(key == 'w' || key == 'W'){   
     move = DIRECTIONS[0];
 
