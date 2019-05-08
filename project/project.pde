@@ -8,7 +8,7 @@ PImage depthImg;
 boolean DEBUG = false;
 boolean SHOW_CONTROLLER = false;
 boolean SHOW_DEPTH_IMAGE = false;
-boolean USE_KINECT = false;
+boolean USE_KINECT = true;
 Screen screen;
 
 // Game Stuff
@@ -56,25 +56,37 @@ void draw(){
   playerPosition.update();
   PVector pos = playerPosition.get();
   Button button;
+  button = keypad.press(pos);
+
   
-  if(SHOW_CONTROLLER){
-    background(0);
-    keypad.display();
-    textSize(18);
-    text(pos.toString(), 10, height-50);
-    ellipse(pos.x, pos.y, 30, 30);
-  }    
   if(SHOW_DEPTH_IMAGE){
     depthImg.updatePixels();
     depthImg = kinect2.getDepthImage();
     image(depthImg, 0, 0);
   }
 
+
+  if(SHOW_CONTROLLER){
+    background(0);
+    keypad.display();
+    textSize(18);
+    if(button != null){
+      text("PRESSED: " + button.name, 10, height-70);
+    }
+    text(pos.toString(), 10, height-50);
+    ellipse(pos.x, pos.y, 30, 30);
+  }    
+
   if(USE_KINECT){
-    button = keypad.press(pos);
-    
+    if(button != null){
+      char k = button.text;
+      key = k;
+      text("CALLING WITH: " + k, 10, height-90);
+      myKeyPressed();
+      
+    }
   }
-  
+
   if(game.state == GAME_OVER){
     delay(3000);
     game.newGame();
@@ -91,8 +103,16 @@ void stop(){
 }
 
 void keyPressed(){
+  
+  myKeyPressed();
+
+}
+
+void myKeyPressed(){
+
   PVector move = new PVector(0, 0);
 
+  
   if(key == '?'){
 
     SHOW_CONTROLLER = !SHOW_CONTROLLER;
