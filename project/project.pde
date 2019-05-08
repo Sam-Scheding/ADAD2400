@@ -82,6 +82,9 @@ void draw(){
     if(button != null){
       char k = button.text;
       key = k;
+      if(millis() < lastMoveTime + 500){ return; }
+      lastMoveTime = millis();
+
       myKeyPressed();
       
     }
@@ -111,8 +114,6 @@ void keyPressed(){
 void myKeyPressed(){
 
   PVector move = new PVector(0, 0);
-  if(millis() < lastMoveTime + 500){ return; }
-  lastMoveTime = millis();
   
   if(key == '?'){
 
