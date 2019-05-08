@@ -10,6 +10,7 @@ boolean SHOW_CONTROLLER = false;
 boolean SHOW_DEPTH_IMAGE = false;
 boolean USE_KINECT = true;
 Screen screen;
+int lastMoveTime = 0;
 
 // Game Stuff
 RNG rng;
@@ -81,7 +82,6 @@ void draw(){
     if(button != null){
       char k = button.text;
       key = k;
-      text("CALLING WITH: " + k, 10, height-90);
       myKeyPressed();
       
     }
@@ -111,7 +111,8 @@ void keyPressed(){
 void myKeyPressed(){
 
   PVector move = new PVector(0, 0);
-
+  if(millis() < lastMoveTime + 500){ return; }
+  lastMoveTime = millis();
   
   if(key == '?'){
 
