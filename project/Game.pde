@@ -46,7 +46,6 @@ class Game{
     player = new Player(map.getRandomWalkableTile());
     screen = new Screen();
     
-    playerPosition = new PlayerPosition();
     keypad = new KeyPad();
     
     entities.tick();

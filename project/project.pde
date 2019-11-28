@@ -1,14 +1,9 @@
-import org.openkinect.processing.*;
 import java.awt.event.KeyEvent;
 
-
-Kinect2 kinect2;
 PImage depthImg;
 
 boolean DEBUG = false;
-boolean SHOW_CONTROLLER = false;
-boolean SHOW_DEPTH_IMAGE = false;
-boolean USE_KINECT = true;
+
 Screen screen;
 int lastMoveTime = 0;
 
@@ -22,7 +17,7 @@ Entities entities;
 HUD hud;
 
 
-PlayerPosition playerPosition;
+//PlayerPosition playerPosition;
 KeyPad keypad;
 
 void settings(){
@@ -31,16 +26,6 @@ void settings(){
 }
 
 void setup() {
-  try{
-    kinect2 = new Kinect2(this);
-    kinect2.initDepth();
-    kinect2.initDevice();    
-  } catch(NullPointerException e){
-    println("Couldn't find the Kinect. Are you sure it's attached?");
-    exit();
-  }
-
-  depthImg = new PImage(kinect2.depthWidth, kinect2.depthHeight);
 
   HUD_HEIGHT = height - HUD_PADDING*2;
   HUD_X = width-HUD_WIDTH-HUD_PADDING;
@@ -53,42 +38,6 @@ void setup() {
 }
 
 void draw(){
-  
-  playerPosition.update();
-  PVector pos = playerPosition.get();
-  Button button;
-  button = keypad.press(pos);
-
-  
-  if(SHOW_DEPTH_IMAGE){
-    depthImg.updatePixels();
-    depthImg = kinect2.getDepthImage();
-    image(depthImg, 0, 0);
-  }
-
-
-  if(SHOW_CONTROLLER){
-    background(0);
-    keypad.display();
-    textSize(18);
-    if(button != null){
-      text("PRESSED: " + button.name, 10, height-70);
-    }
-    text(pos.toString(), 10, height-50);
-    ellipse(pos.x, pos.y, 30, 30);
-  }    
-
-  if(USE_KINECT){
-    if(button != null){
-      char k = button.text;
-      key = k;
-      if(millis() < lastMoveTime + 500){ return; }
-      lastMoveTime = millis();
-
-      myKeyPressed();
-      
-    }
-  }
 
   if(game.state == GAME_OVER){
     delay(3000);
@@ -114,14 +63,7 @@ void keyPressed(){
 void myKeyPressed(){
 
   PVector move = new PVector(0, 0);
-  
-  if(key == '?'){
-
-    SHOW_CONTROLLER = !SHOW_CONTROLLER;
-    SHOW_DEPTH_IMAGE = !SHOW_DEPTH_IMAGE;
-    screen.renderFrame();
-  }
-  
+    
   if(key == 'w' || key == 'W'){   
     move = DIRECTIONS[0];
 
